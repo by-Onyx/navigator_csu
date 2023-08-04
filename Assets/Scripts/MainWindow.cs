@@ -6,25 +6,26 @@ using UnityEngine.UI;
 
 public class MainWindow : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private GameObject popup;
     [SerializeField] private Button btnPoint;
     [SerializeField] private Button btnPointLadder;
     [SerializeField] private Image pointPlace;
+    [SerializeField] private Button cabinetBtn;
+    [SerializeField] private Button interestBtn;
+    [SerializeField] private Button ladderBtn;
+
+    [SerializeField] private PopupLogic popupLogic;
 
     private Button currentButton;
-
     private ButtonClicked buttonClicked = ButtonClicked.NotClicked;
-    private IOFileWork ioFile = new IOFileWork(@"\file.json");
+    //private IOFileWork ioFile = new IOFileWork(@"\file.json");
     private Dictionary<Button, Point> points = new Dictionary<Button, Point>();
     private Quaternion rotation = new Quaternion();
 
-    void Start()
+    private void Awake()
     {
-    }
-
-    void Awake()
-    {
-        btnPoint.onClick.AddListener(OpenPopup);
+        cabinetBtn.onClick.AddListener(() => {SetButtonClicked(ButtonClicked.ButtonCabinet);});
+        interestBtn.onClick.AddListener(() => {SetButtonClicked(ButtonClicked.ButtonInterest);});
+        ladderBtn.onClick.AddListener(() => {SetButtonClicked(ButtonClicked.ButtonLadder);});
         // StartWithPoints();
     }
 
@@ -55,13 +56,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
     }
 
-
-
-    /*private bool IsMouseOverUI()
-    {
-        return EventSystem.current.IsPointerOverGameObject();
-    }*/
-
     private Vector3 getPosition()
     {
         return Input.mousePosition;
@@ -72,9 +66,10 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         var button = SetPointProperties(point.buttonProperties);
         button = Instantiate(button, getPosition(), rotation, this.transform);
         points.Add(button, point);
-        button.onClick.AddListener(() => {
+        button.onClick.AddListener(() =>
+        {
             currentButton = button;
-            OpenPopup();
+            popupLogic.EnablePopup(points[currentButton].pointProperties);
         });
     }
 
@@ -87,41 +82,11 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         return btnPoint;
     }
 
-    private void OpenPopup()
-    {
-        var textFields = popup.GetComponentsInChildren<TMP_InputField>();
-        SetTextField(textFields);
-        popup.transform.SetAsLastSibling();
-        popup.SetActive(true);
-    }
-
-    public void SavePopup()
-    {
-        var textFields = popup.GetComponentsInChildren<TMP_InputField>();
-        SaveTextField(textFields);
-        popup.SetActive(false);
-    }
-
-    private void SaveTextField(TMP_InputField[] textFields)
-    {
-        points[currentButton].pointProperties.TextFirst = textFields[0].text;
-        points[currentButton].pointProperties.TextSecond = textFields[1].text;
-        points[currentButton].pointProperties.TextThird = textFields[2].text;
-    }
-
-    private void SetTextField(TMP_InputField[] textFields)
-    {
-         textFields[0].text  = points[currentButton].pointProperties.TextFirst;
-         textFields[1].text  = points[currentButton].pointProperties.TextSecond;
-         textFields[2].text  = points[currentButton].pointProperties.TextThird;
-    }
-
     public void DeletePoint()
     {
         Destroy(currentButton.gameObject);
         DeletePointFromDict();
         currentButton = null;
-        popup.SetActive(false);
     }
 
     private void DeletePointFromDict()
@@ -129,7 +94,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         points.Remove(currentButton);
     }
 
-    public void CabinetPress()
+    /*public void CabinetPress()
     {
         SetButtonClicked(ButtonClicked.ButtonCabinet);
     }
@@ -142,18 +107,11 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     public void LadderPress()
     {
         SetButtonClicked(ButtonClicked.ButtonLadder);
-    }
+    }*/
 
     private void SetButtonClicked(ButtonClicked clicked)
     {
-        if (buttonClicked != clicked)
-        {
-            buttonClicked = clicked;
-        }
-        else
-        {
-            buttonClicked = ButtonClicked.NotClicked;
-        }
+        buttonClicked = buttonClicked != clicked ? clicked : ButtonClicked.NotClicked;
     }
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
@@ -171,15 +129,15 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         {
             case ButtonClicked.ButtonCabinet:
                 AddPointToCanvas(new Cabinet());
-                return;
+                break;
             case ButtonClicked.ButtonInterest:
                 AddPointToCanvas(new Interest());
-                return;
+                break;
             case ButtonClicked.ButtonLadder:
                 AddPointToCanvas(new Ladder());
-                return;
+                break;
             case ButtonClicked.NotClicked:
-                return;
+                break;
         }
     }
     /*public void SaveAll()
