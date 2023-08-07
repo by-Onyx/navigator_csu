@@ -1,48 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopupLogic : MonoBehaviour
+public class PopupPanel : MonoBehaviour
 {
     [SerializeField] private TMP_InputField firstField;
     [SerializeField] private TMP_InputField secondField;
     [SerializeField] private TMP_InputField thirdField;
-    [SerializeField] private Button saveBtn;
     [SerializeField] private Button deleteBtn;
 
-    private PointProperties pointProperties;
+    [SerializeField] private ButtonPoint buttonPoint;
 
     private void Awake()
     {
-        saveBtn.onClick.AddListener(DisablePopup);
-        deleteBtn.onClick.AddListener(DisablePopup);
+        deleteBtn.onClick.AddListener(() => OnDeletePress(buttonPoint));
     }
 
-    public void EnablePopup(PointProperties pointProperties)
+    public void Init(PointProperties pointProperties, ButtonPoint buttonPoint)
+    {
+        firstField.text = pointProperties.TextFirst;
+        secondField.text = pointProperties.TextSecond;
+        thirdField.text = pointProperties.TextThird;
+
+        this.buttonPoint = buttonPoint;
+    }
+
+    private void OnDeletePress(ButtonPoint buttonPoint)
+    {
+        Destroy(buttonPoint.gameObject);
+        Destroy(this.gameObject);
+    }
+
+    /*private void EnablePopup(PointProperties pointProperties)
     {
         this.pointProperties = pointProperties;
-        SetTextFields();
-        ShowPopup();
     }
 
     private void DisablePopup()
     {
-        SaveTextFields();
         this.pointProperties = null;
-        HidePopup();
-    }
-
-    private void HidePopup()
-    {
-        gameObject.SetActive(false);
-    }
-
-    private void ShowPopup()
-    {
-        gameObject.transform.SetAsLastSibling();
-        gameObject.SetActive(true);
     }
 
     private void SaveTextFields()
@@ -57,5 +53,5 @@ public class PopupLogic : MonoBehaviour
         firstField.text = pointProperties.TextFirst;
         secondField.text = pointProperties.TextSecond;
         thirdField.text = pointProperties.TextThird;
-    }
+    }*/
 }
