@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.DataClasses.Properties;
+using UnityEngine;
 
 namespace Assets.Scripts.MapItems.Points
 {
@@ -7,7 +8,14 @@ namespace Assets.Scripts.MapItems.Points
         public Cabinet() : base()
         {
             UIProperties.Color = Color.black;
-            PointProperties.PointClass = 1;
+            PointProperty.PointClass = 1;
+
+            PointPopupProperty = new PointPopupProperty( "Кабинет", 
+                "Введите номер кабинета",
+                "Введите название кабинета", 
+                "Введите заведующего за кабинетом");
         }
+
+
     }
 }

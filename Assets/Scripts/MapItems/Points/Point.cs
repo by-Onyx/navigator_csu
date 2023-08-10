@@ -1,14 +1,16 @@
-﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
+﻿using Assets.Scripts.DataClasses.Properties;
+using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 
 namespace Assets.Scripts.MapItems.Points
 {
     public abstract class Point : MapItem
     {
-        public PointProperties PointProperties { get; private set; }
+        public PointProperty PointProperty { get; private set; }
+        public PointPopupProperty PointPopupProperty { get; protected set; }
 
         public Point() : base()
         {
-            this.PointProperties = new PointProperties();
+            PointProperty = new PointProperty();
         }
     }
 }

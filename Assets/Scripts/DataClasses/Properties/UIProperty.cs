@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.DataClasses.Properties
 {
-    public class UIProperties
+    public class UIProperty
     {
         public Color Color;
     }

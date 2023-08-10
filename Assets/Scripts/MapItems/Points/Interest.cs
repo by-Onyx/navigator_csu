@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.DataClasses.Properties;
+using UnityEngine;
 
 namespace Assets.Scripts.MapItems.Points
 {
@@ -7,7 +8,12 @@ namespace Assets.Scripts.MapItems.Points
         public Interest() : base()
         {
             UIProperties.Color = Color.red;
-            PointProperties.PointClass = 2;
+            PointProperty.PointClass = 2;
+
+            PointPopupProperty = new PointPopupProperty("Точка интереса",
+                "Введите название точки",
+                "Введите краткое описание",
+                "Введите дополнительные названия");
         }
     }
 }

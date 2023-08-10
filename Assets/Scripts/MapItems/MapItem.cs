@@ -4,11 +4,11 @@ namespace Assets.Scripts.MapItems
 {
     public abstract class MapItem
     {
-        public UIProperties UIProperties { get; private set; }
+        public UIProperty UIProperties { get; private set; }
 
         public MapItem()
         {
-            this.UIProperties = new UIProperties();
+            this.UIProperties = new UIProperty();
         }
     }
 }

@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 973592748910182843}
   - component: {fileID: 1372721664421823334}
   m_Layer: 5
-  m_Name: Popup
+  m_Name: PopupPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,7 +393,6 @@ MonoBehaviour:
   firstField: {fileID: 3090418202831312873}
   secondField: {fileID: 5592265604101410916}
   thirdField: {fileID: 4479071052186189377}
-  saveBtn: {fileID: 8742539223972877014}
   deleteBtn: {fileID: 2721533615220202372}
 --- !u!1 &1515923139147508586
 GameObject:

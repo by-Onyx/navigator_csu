@@ -2,6 +2,8 @@
 {
     public abstract class MapItemProperty
     {
+        public int Id;
+
         public float X;
         public float Y;
 

@@ -3,7 +3,7 @@
 namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
 {
     [Serializable]
-    public class PointProperties : MapItemProperty
+    public class PointProperty : MapItemProperty
     {
         public int PointClass;
 
@@ -11,8 +11,8 @@ namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
         public string TextSecond;
         public string TextThird;
 
-        public PointProperties() { }
+        public PointProperty() { }
 
-        public PointProperties(float x, float y) : base(x, y) { }
+        public PointProperty(float x, float y) : base(x, y) { }
     }
 }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.DataClasses.Properties;
+using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
+using UnityEngine;
 
 namespace Assets.Scripts.MapItems.Transitions
 {
@@ -7,6 +9,8 @@ namespace Assets.Scripts.MapItems.Transitions
         public Ladder() : base()
         {
             UIProperties.Color = Color.blue;
+
+            TransitionPopupProperty = new TransitionPopupProperty("Лестница");
         }
     }
 }

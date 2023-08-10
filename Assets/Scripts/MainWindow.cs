@@ -1,3 +1,8 @@
+using Assets.Scripts.DataClasses;
+using Assets.Scripts.MapItems.Points;
+using Assets.Scripts.MapItems.Transitions;
+using Assets.Scripts.UIClasses;
+using Assets.Scripts.UIClasses.MapItemButtons;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -5,28 +10,30 @@ using UnityEngine.UI;
 
 public class MainWindow : MonoBehaviour, IPointerClickHandler
 {
-    // [SerializeField] private Button btnPoint;
-    [SerializeField] private Button btnPointLadder;
     [SerializeField] private Image pointPlace;
-    [SerializeField] private Button cabinetBtn;
-    [SerializeField] private Button interestBtn;
-    [SerializeField] private Button ladderBtn;
 
-    [SerializeField] private PopupPanel popupPanel;
-    [SerializeField] private ButtonPoint buttonPoint;
+    [SerializeField] private PopupPointPanel popupPointPanel;
+
+    [SerializeField] private PointButton buttonPoint;
+    [SerializeField] private TransitionButton transitionButton;
+
+    [SerializeField] private AbstractDropdown pointDropdown;
+    [SerializeField] private AbstractDropdown transitionDropdown;
 
     // private Button currentButton;
-    private ButtonClicked buttonClicked = ButtonClicked.NotClicked;
     // private IOFileWork ioFile = new IOFileWork(@"\file.json");
     // private Dictionary<Button, Point> points = new Dictionary<Button, Point>();
-    private List<ButtonPoint> buttonPoints = new List<ButtonPoint>();
+    private List<PointButton> pointButtons = new List<PointButton>();
+    private List<TransitionButton> transitionButtons = new List<TransitionButton>();
     private Quaternion rotation = new Quaternion();
 
     private void Awake()
     {
-        cabinetBtn.onClick.AddListener(() => { SetButtonClicked(ButtonClicked.ButtonCabinet); });
-        interestBtn.onClick.AddListener(() => { SetButtonClicked(ButtonClicked.ButtonInterest); });
-        ladderBtn.onClick.AddListener(() => { SetButtonClicked(ButtonClicked.ButtonLadder); });
+        pointDropdown.Init();
+        transitionDropdown.Init();
+        /*cabinetBtn.onClick.AddListener(() => { SetButtonClicked(OptionSelect.Cabinetselected); });
+        interestBtn.onClick.AddListener(() => { SetButtonClicked(OptionSelect.InterestSelected); });
+        ladderBtn.onClick.AddListener(() => { SetButtonClicked(OptionSelect.LadderSelected); });*/
         // StartWithPoints();
     }
 
@@ -60,15 +67,22 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
     private void AddPointToCanvas(Point point)
     {
-        var popup = Instantiate(popupPanel, transform);
+        var popup = Instantiate(popupPointPanel, transform);
         var button = Instantiate(buttonPoint, getPosition(), rotation, transform);
-        button.Init(point, popup);
-        popup.Init(button.pointProperties, button);
+        button.Init(point, popup.gameObject);
+        popup.Init(button, point.PointPopupProperty);
 
-        buttonPoints.Add(button);
+        pointButtons.Add(button);
     }
 
-    public void DeletePoint()
+    private void AddTransitionToCanvas(Transition transition)
+    {
+        var button = Instantiate(transitionButton, getPosition(), rotation, transform);
+
+        transitionButtons.Add(button);
+    }
+
+    /*public void DeletePoint()
     {
         DeletePointFromDict();
     }
@@ -78,10 +92,10 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         // points.Remove(currentButton);
     }
 
-    private void SetButtonClicked(ButtonClicked clicked)
+    private void SetButtonClicked(OptionSelect clicked)
     {
-        buttonClicked = buttonClicked != clicked ? clicked : ButtonClicked.NotClicked;
-    }
+        buttonClicked = buttonClicked != clicked ? clicked : OptionSelect.NothingSelected;
+    }*/
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
@@ -93,18 +107,18 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
     private void CreatePoint()
     {
-        switch (buttonClicked)
+        switch (OptionSelectUse.Option)
         {
-            case ButtonClicked.ButtonCabinet:
+            case OptionSelect.Cabinetselected:
                 AddPointToCanvas(new Cabinet());
                 break;
-            case ButtonClicked.ButtonInterest:
+            case OptionSelect.InterestSelected:
                 AddPointToCanvas(new Interest());
                 break;
-            case ButtonClicked.ButtonLadder:
-                AddPointToCanvas(new Ladder());
+            case OptionSelect.LadderSelected:
+                AddTransitionToCanvas(new Ladder());
                 break;
-            case ButtonClicked.NotClicked:
+            case OptionSelect.NothingSelected:
                 break;
         }
     }
