@@ -13,11 +13,11 @@ namespace Assets.Scripts.UIClasses.MapItemButtons
     {
         public TransitionProperties TransitionProperties { get; private set; }
 
-        public void Init(Transition transition, GameObject popup)
+        public void Init(Transition transition, PopupPointPanel popup)
         {
             this.TransitionProperties = transition.TransitionProperties;
             SetPointProperties(transition.UIProperties);
-            SetOnClick(popup);
+            SetActionOnClick(popup);
         }
     }
 }

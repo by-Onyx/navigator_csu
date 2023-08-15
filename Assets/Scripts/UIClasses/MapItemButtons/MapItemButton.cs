@@ -20,11 +20,12 @@ namespace Assets.Scripts.UIClasses.MapItemButtons
             mapItemButton.colors = colors;
         }
 
-        protected void SetOnClick(GameObject popup)
+        protected void SetActionOnClick(PopupPointPanel popup)
         {
             mapItemButton.onClick.AddListener(delegate
             {
-                popup.SetActive(true);
+                popup.gameObject.transform.SetAsLastSibling();
+                popup.gameObject.SetActive(true);
             });
         }
     }

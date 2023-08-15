@@ -9,10 +9,10 @@ public class PointButton : MapItemButton
 {
     public PointProperty PointProperties { get; private set; }
 
-    public void Init(Point point, GameObject popup)
+    public void Init(Point point, PopupPointPanel popup)
     {
         this.PointProperties = point.PointProperty;
         SetPointProperties(point.UIProperties);
-        SetOnClick(popup);
+        SetActionOnClick(popup);
     }
 }

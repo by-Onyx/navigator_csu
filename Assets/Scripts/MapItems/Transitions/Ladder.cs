@@ -9,6 +9,7 @@ namespace Assets.Scripts.MapItems.Transitions
         public Ladder() : base()
         {
             UIProperties.Color = Color.blue;
+            TransitionProperties.TransitionClass = 1;
 
             TransitionPopupProperty = new TransitionPopupProperty("Лестница");
         }

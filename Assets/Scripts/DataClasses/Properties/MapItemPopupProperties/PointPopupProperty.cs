@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.DataClasses.Properties
 {
-    public class PointPopupProperty : MapItemPopupProperty
+    public class PointPopupProperty
     {
+        public string Header { get; private set; }
         public string FieldHintFirst { get; private set; }
         public string FieldHintSecond { get; private set; }
         public string FieldHintThird { get; private set; }

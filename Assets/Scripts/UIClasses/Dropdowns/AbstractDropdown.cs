@@ -1,5 +1,7 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace Assets.Scripts.UIClasses
 {
@@ -10,5 +12,12 @@ namespace Assets.Scripts.UIClasses
         public abstract void Init();
 
         public abstract void OnValueChanged();
+
+        protected void AddOptionsToDropdown(List<string> options)
+        {
+            dropdown.ClearOptions();
+            dropdown.AddOptions(options);
+            dropdown.onValueChanged.AddListener(delegate { OnValueChanged(); });
+        }
     }
 }

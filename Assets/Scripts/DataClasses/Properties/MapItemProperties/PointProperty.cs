@@ -2,7 +2,6 @@
 
 namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
 {
-    [Serializable]
     public class PointProperty : MapItemProperty
     {
         public int PointClass;

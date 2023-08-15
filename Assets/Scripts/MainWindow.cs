@@ -69,7 +69,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         var popup = Instantiate(popupPointPanel, transform);
         var button = Instantiate(buttonPoint, getPosition(), rotation, transform);
-        button.Init(point, popup.gameObject);
+        button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty);
 
         pointButtons.Add(button);
@@ -109,7 +109,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         switch (OptionSelectUse.Option)
         {
-            case OptionSelect.Cabinetselected:
+            case OptionSelect.CabinetSelected:
                 AddPointToCanvas(new Cabinet());
                 break;
             case OptionSelect.InterestSelected:

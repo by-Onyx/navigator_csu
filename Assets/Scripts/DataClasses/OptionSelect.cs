@@ -4,7 +4,7 @@ using System.ComponentModel;
 public enum OptionSelect
 {
     NothingSelected,
-    Cabinetselected,
+    CabinetSelected,
     InterestSelected,
     LadderSelected
 }

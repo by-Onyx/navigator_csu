@@ -13,7 +13,7 @@ namespace Assets.Scripts.MapItems.Points
             PointPopupProperty = new PointPopupProperty("Точка интереса",
                 "Введите название точки",
                 "Введите краткое описание",
-                "Введите дополнительные названия");
+                "Введите доп. названия");
         }
     }
 }

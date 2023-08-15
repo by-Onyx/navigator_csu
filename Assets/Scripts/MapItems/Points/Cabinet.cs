@@ -13,7 +13,7 @@ namespace Assets.Scripts.MapItems.Points
             PointPopupProperty = new PointPopupProperty( "Кабинет", 
                 "Введите номер кабинета",
                 "Введите название кабинета", 
-                "Введите заведующего за кабинетом");
+                "Введите заведующего");
         }
 
 

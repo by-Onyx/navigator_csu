@@ -8,9 +8,7 @@ namespace Assets.Scripts.UIClasses.Dropdowns
         public override void Init()
         {
             List<string> options = new List<string>() { "Ничего не выбранно", "Создать лестницу" };
-            dropdown.ClearOptions();
-            dropdown.AddOptions(options);
-            dropdown.onValueChanged.AddListener(delegate { OnValueChanged(); });
+            AddOptionsToDropdown(options);
         }
 
         public override void OnValueChanged()

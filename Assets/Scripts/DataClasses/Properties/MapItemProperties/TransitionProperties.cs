@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
 {
-    [Serializable]
     public class TransitionProperties : MapItemProperty
     {
+        public int TransitionClass;
         public List<TransitionProperties> properties { get; private set; } = new List<TransitionProperties>();
 
         public TransitionProperties() { }

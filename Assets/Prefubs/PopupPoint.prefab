@@ -390,9 +390,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cac7419e37177848a026dc3d5ece04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstField: {fileID: 3090418202831312873}
-  secondField: {fileID: 5592265604101410916}
-  thirdField: {fileID: 4479071052186189377}
+  header: {fileID: 0}
+  fieldFirst: {fileID: 0}
+  fieldSecond: {fileID: 0}
+  fieldThird: {fileID: 0}
   deleteBtn: {fileID: 2721533615220202372}
 --- !u!1 &1515923139147508586
 GameObject:

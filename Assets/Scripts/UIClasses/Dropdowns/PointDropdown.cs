@@ -8,9 +8,7 @@ namespace Assets.Scripts.UIClasses.Dropdowns
         public override void Init()
         {
             List<string> options = new List<string>() { "Ничего не выбранно", "Создать кабинет", "Создать точку интереса" };
-            dropdown.ClearOptions();
-            dropdown.AddOptions(options);
-            dropdown.onValueChanged.AddListener(delegate { OnValueChanged(); });
+            AddOptionsToDropdown(options);
         }
 
         public override void OnValueChanged()
@@ -21,7 +19,7 @@ namespace Assets.Scripts.UIClasses.Dropdowns
                     OptionSelectUse.Option = OptionSelect.NothingSelected;
                     break;
                 case 1:
-                    OptionSelectUse.Option = OptionSelect.Cabinetselected;
+                    OptionSelectUse.Option = OptionSelect.CabinetSelected;
                     break;
                 case 2:
                     OptionSelectUse.Option = OptionSelect.InterestSelected;
