@@ -19,6 +19,7 @@ public class PopupPointPanel : MonoBehaviour
     {
         SetFields(buttonPoint.PointProperties);
         SetHints(pointPopupProperty);
+
         deleteBtn.onClick.AddListener(() => OnDeletePress(buttonPoint));
     }
 

@@ -1,8 +1,11 @@
+using Assets.Scripts;
 using Assets.Scripts.DataClasses;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.MapItems.Transitions;
 using Assets.Scripts.UIClasses;
 using Assets.Scripts.UIClasses.MapItemButtons;
+using Assets.Scripts.UIClasses.Popups;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,16 +16,18 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image pointPlace;
 
     [SerializeField] private PopupPointPanel popupPointPanel;
+    [SerializeField] private PopupTransitionPanel popupTransitionPanel;
 
-    [SerializeField] private PointButton buttonPoint;
+    [SerializeField] private PointButton pointButton;
     [SerializeField] private TransitionButton transitionButton;
 
     [SerializeField] private AbstractDropdown pointDropdown;
     [SerializeField] private AbstractDropdown transitionDropdown;
 
-    // private Button currentButton;
+    [SerializeField] private Button connectButton;
+
     // private IOFileWork ioFile = new IOFileWork(@"\file.json");
-    // private Dictionary<Button, Point> points = new Dictionary<Button, Point>();
+    private Connection connection = Connection.GetInstance();
     private List<PointButton> pointButtons = new List<PointButton>();
     private List<TransitionButton> transitionButtons = new List<TransitionButton>();
     private Quaternion rotation = new Quaternion();
@@ -31,9 +36,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         pointDropdown.Init();
         transitionDropdown.Init();
-        /*cabinetBtn.onClick.AddListener(() => { SetButtonClicked(OptionSelect.Cabinetselected); });
-        interestBtn.onClick.AddListener(() => { SetButtonClicked(OptionSelect.InterestSelected); });
-        ladderBtn.onClick.AddListener(() => { SetButtonClicked(OptionSelect.LadderSelected); });*/
+        connectButton.onClick.AddListener(() => { Connect(); });
         // StartWithPoints();
     }
 
@@ -68,7 +71,8 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     private void AddPointToCanvas(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(buttonPoint, getPosition(), rotation, transform);
+        var button = Instantiate(pointButton, getPosition(), rotation, transform);
+
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty);
 
@@ -77,9 +81,59 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
     private void AddTransitionToCanvas(Transition transition)
     {
+        var popup = Instantiate(popupTransitionPanel, transform);
         var button = Instantiate(transitionButton, getPosition(), rotation, transform);
 
+        button.Init(transition, popup);
+        popup.Init(button, transition.TransitionPopupProperty);
+
         transitionButtons.Add(button);
+    }
+
+    private void Connect()
+    {
+        if (connection.ConnectionProcess())
+        {
+            HideAllTransitions();
+        }
+        else
+        {
+            ConnectAllTransitions();
+            ShowAllTransitions();
+        }
+    }
+
+    private void ConnectAllTransitions()
+    {
+        var transitionButtons = connection.TransitionButtons;
+        Debug.Log(transitionButtons.Count);
+        AddTransitionToEachOther(transitionButtons);
+        connection.TransitionButtons.Clear();
+    }
+
+    private static void AddTransitionToEachOther(List<TransitionButton> transitionButtons)
+    {
+        for (int i = 0; i < transitionButtons.Count; i++)
+        {
+            for (int j = 0; j < transitionButtons.Count; j++)
+            {
+                if (i != j)
+                {
+                    transitionButtons[i].TransitionProperties
+                        .ConnectedTransitionButtons.Add(transitionButtons[j]);
+                }
+            }
+        }
+    }
+
+    private void HideAllTransitions()
+    {
+        pointButtons.ForEach(x => x.gameObject.SetActive(false));
+    }
+
+    private void ShowAllTransitions()
+    {
+        pointButtons.ForEach(x => x.gameObject.SetActive(true));
     }
 
     /*public void DeletePoint()

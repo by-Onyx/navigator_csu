@@ -15,4 +15,13 @@ public class PointButton : MapItemButton
         SetPointProperties(point.UIProperties);
         SetActionOnClick(popup);
     }
+
+    protected void SetActionOnClick(PopupPointPanel popup)
+    {
+        mapItemButton.onClick.AddListener(delegate
+        {
+            popup.gameObject.transform.SetAsLastSibling();
+            popup.gameObject.SetActive(true);
+        });
+    }
 }

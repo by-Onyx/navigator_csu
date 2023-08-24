@@ -11,22 +11,13 @@ namespace Assets.Scripts.UIClasses.MapItemButtons
 {
     public abstract class MapItemButton : MonoBehaviour
     {
-        [SerializeField] private Button mapItemButton;
+        [SerializeField] protected Button mapItemButton;
 
         protected void SetPointProperties(UIProperty properties)
         {
             var colors = mapItemButton.colors;
             colors.normalColor = properties.Color;
             mapItemButton.colors = colors;
-        }
-
-        protected void SetActionOnClick(PopupPointPanel popup)
-        {
-            mapItemButton.onClick.AddListener(delegate
-            {
-                popup.gameObject.transform.SetAsLastSibling();
-                popup.gameObject.SetActive(true);
-            });
         }
     }
 }
