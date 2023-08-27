@@ -24,10 +24,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     [SerializeField] private AbstractDropdown pointDropdown;
     [SerializeField] private AbstractDropdown transitionDropdown;
 
-    [SerializeField] private Button connectButton;
-
     // private IOFileWork ioFile = new IOFileWork(@"\file.json");
-    private Connection connection = Connection.GetInstance();
     private List<PointButton> pointButtons = new List<PointButton>();
     private List<TransitionButton> transitionButtons = new List<TransitionButton>();
     private Quaternion rotation = new Quaternion();
@@ -36,7 +33,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         pointDropdown.Init();
         transitionDropdown.Init();
-        connectButton.onClick.AddListener(() => { Connect(); });
         // StartWithPoints();
     }
 
@@ -90,7 +86,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         transitionButtons.Add(button);
     }
 
-    private void Connect()
+    /*private void Connect()
     {
         if (connection.ConnectionProcess())
         {
@@ -101,17 +97,17 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
             ConnectAllTransitions();
             ShowAllTransitions();
         }
-    }
+    }*/
 
-    private void ConnectAllTransitions()
+    /*private void ConnectAllTransitions()
     {
         var transitionButtons = connection.TransitionButtons;
         Debug.Log(transitionButtons.Count);
         AddTransitionToEachOther(transitionButtons);
         connection.TransitionButtons.Clear();
-    }
+    }*/
 
-    private static void AddTransitionToEachOther(List<TransitionButton> transitionButtons)
+    /*private static void AddTransitionToEachOther(List<TransitionButton> transitionButtons)
     {
         for (int i = 0; i < transitionButtons.Count; i++)
         {
@@ -134,7 +130,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     private void ShowAllTransitions()
     {
         pointButtons.ForEach(x => x.gameObject.SetActive(true));
-    }
+    }*/
 
     /*public void DeletePoint()
     {
