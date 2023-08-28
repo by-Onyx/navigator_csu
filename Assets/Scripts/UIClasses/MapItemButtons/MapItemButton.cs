@@ -15,9 +15,7 @@ namespace Assets.Scripts.UIClasses.MapItemButtons
 
         protected void SetPointProperties(UIProperty properties)
         {
-            var colors = mapItemButton.colors;
-            colors.normalColor = properties.Color;
-            mapItemButton.colors = colors;
+            mapItemButton.image.sprite = properties.Sprite;
         }
     }
 }

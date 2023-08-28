@@ -7,7 +7,13 @@ namespace Assets.Scripts.UIClasses.Dropdowns
     {
         public override void Init()
         {
-            List<string> options = new List<string>() { "Ничего не выбранно", "Создать лестницу" };
+            List<string> options = new List<string>() 
+            { 
+                "Ничего не выбранно", 
+                "Создать лестницу", 
+                "Создать лифт", 
+                "Создать туалет"
+            };
             AddOptionsToDropdown(options);
         }
 
@@ -20,6 +26,12 @@ namespace Assets.Scripts.UIClasses.Dropdowns
                     break;
                 case 1:
                     OptionSelectUse.Option = OptionSelect.LadderSelected;
+                    break;
+                case 2:
+                    OptionSelectUse.Option = OptionSelect.ElevatorSelected;
+                    break;
+                case 3:
+                    OptionSelectUse.Option = OptionSelect.ToiletSelected;
                     break;
             }
         }

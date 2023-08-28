@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.DataClasses.Properties;
+using Assets.Scripts.MapItems.Points;
 
 namespace Assets.Scripts.MapItems
 {

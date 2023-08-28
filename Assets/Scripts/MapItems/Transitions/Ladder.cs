@@ -8,7 +8,8 @@ namespace Assets.Scripts.MapItems.Transitions
     {
         public Ladder() : base()
         {
-            UIProperties.Color = Color.blue;
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/ladder1");
+
             TransitionProperties.TransitionClass = 1;
 
             TransitionPopupProperty = new TransitionPopupProperty("Лестница");

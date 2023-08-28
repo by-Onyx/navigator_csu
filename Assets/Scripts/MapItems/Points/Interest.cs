@@ -7,7 +7,8 @@ namespace Assets.Scripts.MapItems.Points
     {
         public Interest() : base()
         {
-            UIProperties.Color = Color.red;
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/exclam_sign");
+
             PointProperty.PointClass = 2;
 
             PointPopupProperty = new PointPopupProperty("Точка интереса",

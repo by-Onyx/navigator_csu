@@ -15,8 +15,11 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Image pointPlace;
 
+    [SerializeField] private Button closeButton;
+
     [SerializeField] private PopupPointPanel popupPointPanel;
     [SerializeField] private PopupTransitionPanel popupTransitionPanel;
+    [SerializeField] private PopupMenuPanel popupMenuPanel;
 
     [SerializeField] private PointButton pointButton;
     [SerializeField] private TransitionButton transitionButton;
@@ -33,6 +36,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         pointDropdown.Init();
         transitionDropdown.Init();
+        closeButton.onClick.AddListener(CloseMenu);
         // StartWithPoints();
     }
 
@@ -86,66 +90,35 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         transitionButtons.Add(button);
     }
 
-    /*private void Connect()
+    private void CloseMenu()
     {
-        if (connection.ConnectionProcess())
+        TransitionVisible();
+        Disabled();
+    }
+
+    private void TransitionVisible()
+    {
+        if (popupMenuPanel.IsTransitionVisible)
         {
-            HideAllTransitions();
+            transitionButtons.ForEach(x => x.gameObject.SetActive(false));
         }
         else
         {
-            ConnectAllTransitions();
-            ShowAllTransitions();
+            transitionButtons.ForEach(x => x.gameObject.SetActive(true));
         }
-    }*/
+    }
 
-    /*private void ConnectAllTransitions()
+    private void Disabled()
     {
-        var transitionButtons = connection.TransitionButtons;
-        Debug.Log(transitionButtons.Count);
-        AddTransitionToEachOther(transitionButtons);
-        connection.TransitionButtons.Clear();
-    }*/
-
-    /*private static void AddTransitionToEachOther(List<TransitionButton> transitionButtons)
-    {
-        for (int i = 0; i < transitionButtons.Count; i++)
+        if (popupMenuPanel.IsDisabled)
         {
-            for (int j = 0; j < transitionButtons.Count; j++)
-            {
-                if (i != j)
-                {
-                    transitionButtons[i].TransitionProperties
-                        .ConnectedTransitionButtons.Add(transitionButtons[j]);
-                }
-            }
+
+        }
+        else
+        {
+
         }
     }
-
-    private void HideAllTransitions()
-    {
-        pointButtons.ForEach(x => x.gameObject.SetActive(false));
-    }
-
-    private void ShowAllTransitions()
-    {
-        pointButtons.ForEach(x => x.gameObject.SetActive(true));
-    }*/
-
-    /*public void DeletePoint()
-    {
-        DeletePointFromDict();
-    }
-
-    private void DeletePointFromDict()
-    {
-        // points.Remove(currentButton);
-    }
-
-    private void SetButtonClicked(OptionSelect clicked)
-    {
-        buttonClicked = buttonClicked != clicked ? clicked : OptionSelect.NothingSelected;
-    }*/
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
@@ -167,6 +140,12 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
                 break;
             case OptionSelect.LadderSelected:
                 AddTransitionToCanvas(new Ladder());
+                break;
+            case OptionSelect.ElevatorSelected:
+                AddTransitionToCanvas(new Elevator());
+                break;
+            case OptionSelect.ToiletSelected:
+                AddTransitionToCanvas(new Toilet());
                 break;
             case OptionSelect.NothingSelected:
                 break;

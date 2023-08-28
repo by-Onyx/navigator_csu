@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.DataClasses.Properties;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.MapItems.Points
 {
@@ -7,7 +9,8 @@ namespace Assets.Scripts.MapItems.Points
     {
         public Cabinet() : base()
         {
-            UIProperties.Color = Color.black;
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/cabinet");
+
             PointProperty.PointClass = 1;
 
             PointPopupProperty = new PointPopupProperty( "Кабинет", 

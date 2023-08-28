@@ -6,5 +6,7 @@ public enum OptionSelect
     NothingSelected,
     CabinetSelected,
     InterestSelected,
-    LadderSelected
+    LadderSelected,
+    ElevatorSelected,
+    ToiletSelected
 }
