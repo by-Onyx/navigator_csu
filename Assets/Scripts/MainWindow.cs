@@ -26,6 +26,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
     [SerializeField] private Button connectButton;
 
+
     // private IOFileWork ioFile = new IOFileWork(@"\file.json");
     private Connection connection = Connection.GetInstance();
     private List<PointButton> pointButtons = new List<PointButton>();
@@ -72,7 +73,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         var popup = Instantiate(popupPointPanel, transform);
         var button = Instantiate(pointButton, getPosition(), rotation, transform);
-
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty);
 
