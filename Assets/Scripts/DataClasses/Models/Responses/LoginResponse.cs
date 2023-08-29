@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataClasses.Models.DTO
+namespace DataClasses.Models.Responses
 {
     [Serializable]
     public struct LoginResponse
