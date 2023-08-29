@@ -1,11 +1,10 @@
-﻿using Assets.Scripts.DataClasses;
-using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
-using Assets.Scripts.UIClasses.MapItemButtons;
+﻿using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
 using TMPro;
+using UIClasses.MapItemButtons;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UIClasses.Popups
+namespace UIClasses.Popups
 {
     public class PopupTransitionPanel : MonoBehaviour
     {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UIClasses.MapItemButtons
+namespace UIClasses.MapItemButtons
 {
     public abstract class MapItemButton : MonoBehaviour
     {

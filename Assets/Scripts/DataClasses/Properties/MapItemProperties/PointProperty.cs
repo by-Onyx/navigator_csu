@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
+﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
+
+namespace DataClasses.Properties.MapItemProperties
 {
     public class PointProperty : MapItemProperty
     {

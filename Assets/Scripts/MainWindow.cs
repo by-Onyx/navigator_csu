@@ -4,15 +4,22 @@ using Assets.Scripts.DataClasses;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.MapItems.Transitions;
 using Assets.Scripts.UIClasses;
-using Assets.Scripts.UIClasses.MapItemButtons;
 using Assets.Scripts.UIClasses.Popups;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using DataClasses.Models;
+using DataClasses.Models.Responses;
+using DataClasses.Properties.MapItemProperties;
 using IO;
+using UIClasses.MapItemButtons;
+using UIClasses.Popups;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static DataClasses.PointMapper;
 
 public class MainWindow : MonoBehaviour, IPointerClickHandler
 {
@@ -41,28 +48,24 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         pointDropdown.Init();
         transitionDropdown.Init();
         closeButton.onClick.AddListener(CloseMenu);
-        //StartWithPoints();
+        StartCoroutine(GetAllPoints(StartWithPoints));
     }
 
-    /*private void StartWithPoints()
+    private void StartWithPoints(IEnumerable<PointProperty> pointProperties)
     {
-        var propertiesList = ioFile.Read();
-        foreach (var properties in propertiesList.Points)
+        foreach (var properties in pointProperties)
         {
             switch (properties.PointClass)
             {
                 case 1:
-                    AddPointToCanvas(new Cabinet(properties, OpenPopupCabinet));
+                    AddPointToCanvas(new Cabinet());
                     break;
                 case 2:
-                    AddPointToCanvas(new Interest(properties, OpenPopupCabinet));
-                    break;
-                case 3:
-                    AddPointToCanvas(new Ladder(properties, OpenPopupCabinet));
+                    AddPointToCanvas(new Interest());
                     break;
             }
         }
-    }*/
+    }
 
     private Vector3 GetPosition()
     {
@@ -159,4 +162,27 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         points.ForEach(x => pointsProperties.Add(x.pointProperties));
         ioFile.Write(pointsProperties);
     }*/
+
+    private IEnumerator GetAllPoints(Action<IEnumerable<PointProperty>> callback)
+    {
+        var webRequest = PrepareGetRequest();
+        yield return webRequest.SendWebRequest();
+        if (!webRequest.isDone)
+        {
+            yield break;
+        }
+        
+        var response =
+            JsonUtility.FromJson<GetAllPointsResponse>("{\"points\":" + webRequest.downloadHandler.text + "}");
+        var points = response.points.Select(Map);
+        callback(points);
+    }
+
+    private UnityWebRequest PrepareGetRequest()
+    {
+        var request = UnityWebRequest.Get("http://195.54.14.121:8086/api/building/1/floor/1/point");
+        request.SetRequestHeader("accept", "*/*");
+        request.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
+        return request;
+    }
 }

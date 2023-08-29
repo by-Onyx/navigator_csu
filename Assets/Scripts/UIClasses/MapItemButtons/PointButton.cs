@@ -1,24 +1,28 @@
 ﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using Assets.Scripts.MapItems.Points;
-using Assets.Scripts.UIClasses.MapItemButtons;
+using DataClasses.Properties.MapItemProperties;
+using UIClasses.Popups;
 
-public class PointButton : MapItemButton
+namespace UIClasses.MapItemButtons
 {
-    public PointProperty PointProperties { get; private set; }
-
-    public void Init(Point point, PopupPointPanel popup)
+    public class PointButton : MapItemButton
     {
-        this.PointProperties = point.PointProperty;
-        SetPointProperties(point.UIProperties);
-        SetActionOnClick(popup);
-    }
+        public PointProperty PointProperties { get; private set; }
 
-    protected void SetActionOnClick(PopupPointPanel popup)
-    {
-        mapItemButton.onClick.AddListener(delegate
+        public void Init(Point point, PopupPointPanel popup)
         {
-            popup.gameObject.transform.SetAsLastSibling();
-            popup.gameObject.SetActive(true);
-        });
+            this.PointProperties = point.PointProperty;
+            SetPointProperties(point.UIProperties);
+            SetActionOnClick(popup);
+        }
+
+        protected void SetActionOnClick(PopupPointPanel popup)
+        {
+            mapItemButton.onClick.AddListener(delegate
+            {
+                popup.gameObject.transform.SetAsLastSibling();
+                popup.gameObject.SetActive(true);
+            });
+        }
     }
 }

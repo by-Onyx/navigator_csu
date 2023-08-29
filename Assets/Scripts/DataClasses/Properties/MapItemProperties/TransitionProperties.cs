@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.UIClasses.MapItemButtons;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UIClasses.MapItemButtons;
 
 namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
 {

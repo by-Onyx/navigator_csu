@@ -2,6 +2,7 @@
 using System.Text;
 using Assets.Scripts.UIClasses.Menus;
 using Assets.Scripts.UIClasses.Popups;
+using DataClasses;
 using DataClasses.Models.DTO;
 using TMPro;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace UIClasses.Popups
         [SerializeField] private MenuAdminPanel menuAdminPanel;
         [SerializeField] private MenuUserPanel menuUserPanel;
 
-        private const string URL = "http://localhost:8000/api/auth/login";
+        private const string URL = "http://195.54.14.121:8086/api/auth/login";
 
         private void Awake() 
             => loginButton.onClick.AddListener(Enter);
@@ -41,6 +42,8 @@ namespace UIClasses.Popups
 
             if (request.responseCode == 200L)
             {
+                Config.JwtToken = JsonUtility
+                    .FromJson<LoginResponse>(Encoding.UTF8.GetString(request.downloadHandler.data)).token;
                 menuUserPanel.gameObject.SetActive(false);
                 menuAdminPanel.gameObject.SetActive(true);
                 gameObject.SetActive(false);
@@ -53,7 +56,7 @@ namespace UIClasses.Popups
             }
         }
 
-        private UnityWebRequest PrepareRequest(string json)
+        private static UnityWebRequest PrepareRequest(string json)
         {
             var formData = new WWWForm();
             var request = UnityWebRequest.Post(URL, formData);
