@@ -1,6 +1,8 @@
-public class IOFileWork
+namespace IO
 {
-    /* private string path = @"Assets\MapInfo";
+    public class IOFileWork
+    {
+        /* private string path = @"Assets\MapInfo";
 
      public IOFileWork(string fileName)
      {
@@ -20,4 +22,5 @@ public class IOFileWork
          MapProperties map = JsonUtility.FromJson<MapProperties>(file);
          return map;
      }*/
+    }
 }

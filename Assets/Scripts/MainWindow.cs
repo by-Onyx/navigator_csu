@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Assets.Scripts.DataClasses;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.MapItems.Transitions;
@@ -5,8 +7,11 @@ using Assets.Scripts.UIClasses;
 using Assets.Scripts.UIClasses.MapItemButtons;
 using Assets.Scripts.UIClasses.Popups;
 using System.Collections.Generic;
+using System.Net.Http;
+using IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class MainWindow : MonoBehaviour, IPointerClickHandler
@@ -25,17 +30,18 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     [SerializeField] private AbstractDropdown pointDropdown;
     [SerializeField] private AbstractDropdown transitionDropdown;
 
-    // private IOFileWork ioFile = new IOFileWork(@"\file.json");
-    private List<PointButton> pointButtons = new List<PointButton>();
-    private List<TransitionButton> transitionButtons = new List<TransitionButton>();
+    private IOFileWork ioFile = new(/*@"\file.json"*/);
+    private List<PointButton> _pointButtons = new();
+    private List<TransitionButton> transitionButtons = new();
     private Quaternion rotation = new Quaternion();
+    private HttpClient _client = new() { BaseAddress = new Uri("http://localhost:8000/api") };
 
     private void Awake()
     {
         pointDropdown.Init();
         transitionDropdown.Init();
         closeButton.onClick.AddListener(CloseMenu);
-        // StartWithPoints();
+        //StartWithPoints();
     }
 
     /*private void StartWithPoints()
@@ -54,14 +60,11 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
                 case 3:
                     AddPointToCanvas(new Ladder(properties, OpenPopupCabinet));
                     break;
-                default:
-                    break;
-
             }
         }
     }*/
 
-    private Vector3 getPosition()
+    private Vector3 GetPosition()
     {
         return Input.mousePosition;
     }
@@ -69,18 +72,18 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     private void AddPointToCanvas(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, getPosition(), rotation, transform);
+        var button = Instantiate(pointButton, GetPosition(), rotation, transform);
 
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty);
 
-        pointButtons.Add(button);
+        _pointButtons.Add(button);
     }
 
     private void AddTransitionToCanvas(Transition transition)
     {
         var popup = Instantiate(popupTransitionPanel, transform);
-        var button = Instantiate(transitionButton, getPosition(), rotation, transform);
+        var button = Instantiate(transitionButton, GetPosition(), rotation, transform);
 
         button.Init(transition, popup);
         popup.Init(button, transition.TransitionPopupProperty);
