@@ -36,7 +36,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     private List<PointButton> _pointButtons = new();
     private List<TransitionButton> transitionButtons = new();
     private Quaternion rotation = new Quaternion();
-    private HttpClient _client = new() { BaseAddress = new Uri("http://localhost:8000/api") };
 
     private void Awake()
     {
