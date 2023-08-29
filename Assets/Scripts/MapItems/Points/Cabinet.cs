@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.DataClasses.Properties;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.MapItems.Points
 {
@@ -13,9 +11,9 @@ namespace Assets.Scripts.MapItems.Points
 
             PointProperty.PointClass = 1;
 
-            PointPopupProperty = new PointPopupProperty( "Кабинет", 
+            PointPopupProperty = new PointPopupProperty("Кабинет",
                 "Введите номер кабинета",
-                "Введите название кабинета", 
+                "Введите название кабинета",
                 "Введите заведующего");
         }
 

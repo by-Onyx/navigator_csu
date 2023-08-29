@@ -1,7 +1,6 @@
 using Assets.Scripts.DataClasses.Properties;
 using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 

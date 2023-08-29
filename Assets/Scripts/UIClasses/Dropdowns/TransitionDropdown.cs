@@ -7,11 +7,11 @@ namespace Assets.Scripts.UIClasses.Dropdowns
     {
         public override void Init()
         {
-            List<string> options = new List<string>() 
-            { 
-                "Ничего не выбранно", 
-                "Создать лестницу", 
-                "Создать лифт", 
+            List<string> options = new List<string>()
+            {
+                "Ничего не выбранно",
+                "Создать лестницу",
+                "Создать лифт",
                 "Создать туалет"
             };
             AddOptionsToDropdown(options);

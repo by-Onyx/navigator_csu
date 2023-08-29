@@ -1,9 +1,6 @@
-﻿using Assets.Scripts.DataClasses.Properties;
-using Assets.Scripts.DataClasses.Properties.MapItemProperties;
+﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.UIClasses.MapItemButtons;
-using UnityEngine;
-using UnityEngine.UI;
 
 public class PointButton : MapItemButton
 {

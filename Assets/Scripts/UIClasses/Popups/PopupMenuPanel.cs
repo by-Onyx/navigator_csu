@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UIClasses.Popups
@@ -13,9 +8,9 @@ namespace Assets.Scripts.UIClasses.Popups
         [SerializeField] private Toggle isDisabled;
         [SerializeField] private Toggle isTransitionVisible;
 
-        public bool IsDisabled 
-        { 
-            get 
+        public bool IsDisabled
+        {
+            get
             {
                 return isDisabled.isOn;
             }
@@ -27,7 +22,7 @@ namespace Assets.Scripts.UIClasses.Popups
                 return isTransitionVisible.isOn;
             }
         }
-        
+
 
     }
 }

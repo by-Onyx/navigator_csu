@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.DataClasses.Properties;
-using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
+﻿using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
 using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 
 namespace Assets.Scripts.MapItems.Transitions

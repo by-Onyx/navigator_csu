@@ -1,10 +1,6 @@
-﻿using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
+﻿using Assets.Scripts.DataClasses;
+using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
 using Assets.Scripts.UIClasses.MapItemButtons;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

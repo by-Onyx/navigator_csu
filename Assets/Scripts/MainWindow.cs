@@ -1,11 +1,9 @@
-using Assets.Scripts;
 using Assets.Scripts.DataClasses;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.MapItems.Transitions;
 using Assets.Scripts.UIClasses;
 using Assets.Scripts.UIClasses.MapItemButtons;
 using Assets.Scripts.UIClasses.Popups;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
