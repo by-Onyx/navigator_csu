@@ -53,15 +53,15 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         {
             return;
         }
-        foreach (var properties in response.Value.points.Select(Map))
+        foreach (var properties in response.Value.points.Select(MapPoint))
         {
             switch (properties.PointClass)
             {
                 case 1:
-                    AddPointToCanvas(new Cabinet());
+                    AddPointToCanvas(new Cabinet(properties));
                     break;
                 case 2:
-                    AddPointToCanvas(new Interest());
+                    AddPointToCanvas(new Interest(properties));
                     break;
             }
         }

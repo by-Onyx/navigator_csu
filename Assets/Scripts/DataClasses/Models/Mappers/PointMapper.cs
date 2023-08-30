@@ -10,7 +10,7 @@ namespace DataClasses
             return new PointProperty
             {
                 Id = model.id,
-                pointType = model.pointType,
+                PointClass = model.pointType.id,
                 TextFirst = model.firstField,
                 TextSecond = model.secondField,
                 TextThird = model.thirdField,

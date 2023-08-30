@@ -8,10 +8,18 @@ namespace Assets.Scripts.MapItems.Transitions
     {
         public Toilet() : base()
         {
-            UIProperties.Sprite = Resources.Load<Sprite>("Icons/character_T2");
-
             TransitionProperties.TransitionClass = 3;
+        }
 
+        public Toilet(TransitionProperties transitionProperties) : base(transitionProperties) { }
+
+        public override void LoadSprite()
+        {
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/character_T2");
+        }
+
+        public override void SetFields()
+        {
             TransitionPopupProperty = new TransitionPopupProperty("Туалет");
         }
     }

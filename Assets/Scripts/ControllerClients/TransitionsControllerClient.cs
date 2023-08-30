@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.DataClasses.Models.Responses;
 using DataClasses;
 using DataClasses.Models.Requests;
 using DataClasses.Models.Responses;

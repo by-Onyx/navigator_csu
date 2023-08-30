@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.DataClasses.Models.Types;
+using System;
 
 namespace DataClasses.Models.Requests
 {

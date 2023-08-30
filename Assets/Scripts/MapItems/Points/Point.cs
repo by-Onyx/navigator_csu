@@ -9,9 +9,14 @@ namespace Assets.Scripts.MapItems.Points
         public PointProperty PointProperty { get; private set; }
         public PointPopupProperty PointPopupProperty { get; protected set; }
 
-        public Point() : base()
+        protected Point() : base()
         {
             PointProperty = new PointProperty();
+        }
+
+        protected Point(PointProperty pointProperty) : base()
+        {
+            PointProperty = pointProperty;
         }
     }
 }

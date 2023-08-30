@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
+﻿using Assets.Scripts.DataClasses.Models;
+using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using DataClasses.Models;
 
 namespace DataClasses

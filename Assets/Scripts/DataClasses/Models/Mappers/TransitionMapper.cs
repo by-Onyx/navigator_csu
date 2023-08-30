@@ -14,7 +14,7 @@ namespace Assets.Scripts.DataClasses.Models.Mappers
             return new TransitionProperties
             {
                 Id = model.id,
-                transitionType = model.transitionType,
+                TransitionClass = model.transitionType.id,
                 X = model.x,
                 Y = model.y
             };
