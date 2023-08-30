@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Text;
-using Assets.Scripts.UIClasses.Menus;
+﻿using Assets.Scripts.UIClasses.Menus;
 using Assets.Scripts.UIClasses.Popups;
+using ControllerClients;
 using DataClasses;
-using DataClasses.Models.DTO;
+using DataClasses.Models.Requests;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace UIClasses.Popups
@@ -19,31 +17,19 @@ namespace UIClasses.Popups
         [SerializeField] private ErrorLoginPanel errorPanel;
         [SerializeField] private MenuAdminPanel menuAdminPanel;
         [SerializeField] private MenuUserPanel menuUserPanel;
-
-        private const string URL = "http://195.54.14.121:8086/api/auth/login";
-
+        
         private void Awake() 
             => loginButton.onClick.AddListener(Enter);
 
-        private void Enter()
-            => StartCoroutine(Login());
-        
-        private IEnumerator Login()
+        private async void Enter()
         {
-            var loginRequest = new LoginRequest
+            var loginControllerClient = new LoginControllerClient();
+            var response = await loginControllerClient.LogIn(new LoginRequest
+                { login = login.text, password = password.text });
+            if (response is not null)
             {
-                login = login.text,
-                password = password.text
-            };
-            var json = JsonUtility.ToJson(loginRequest);
-            var request = PrepareRequest(json);
-
-            yield return request.SendWebRequest();
-
-            if (request.responseCode == 200L)
-            {
-                Config.JwtToken = JsonUtility
-                    .FromJson<LoginResponse>(Encoding.UTF8.GetString(request.downloadHandler.data)).token;
+                Debug.Log(response.Value.token);
+                Config.JwtToken = response.Value.token;
                 menuUserPanel.gameObject.SetActive(false);
                 menuAdminPanel.gameObject.SetActive(true);
                 gameObject.SetActive(false);
@@ -54,21 +40,7 @@ namespace UIClasses.Popups
                 errorPanel.gameObject.transform.SetAsLastSibling();
                 errorPanel.gameObject.SetActive(true);
             }
-        }
-
-        private static UnityWebRequest PrepareRequest(string json)
-        {
-            var formData = new WWWForm();
-            var request = UnityWebRequest.Post(URL, formData);
             
-            var postBytes = Encoding.UTF8.GetBytes(json);
-            var uploadHandler = new UploadHandlerRaw(postBytes);
-            request.uploadHandler = uploadHandler;
-            
-            request.SetRequestHeader("accept", "*/*");
-            request.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
-
-            return request;
         }
     }
 }

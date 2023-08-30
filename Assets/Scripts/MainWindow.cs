@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Assets.Scripts.DataClasses;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.MapItems.Transitions;
@@ -8,16 +7,12 @@ using Assets.Scripts.UIClasses.Popups;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using DataClasses.Models;
-using DataClasses.Models.Responses;
-using DataClasses.Properties.MapItemProperties;
+using ControllerClients;
 using IO;
 using UIClasses.MapItemButtons;
 using UIClasses.Popups;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using static DataClasses.PointMapper;
 
@@ -48,12 +43,18 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         pointDropdown.Init();
         transitionDropdown.Init();
         closeButton.onClick.AddListener(CloseMenu);
-        StartCoroutine(GetAllPoints(StartWithPoints));
+        StartWithPoints();
     }
 
-    private void StartWithPoints(IEnumerable<PointProperty> pointProperties)
+    private async void StartWithPoints()
     {
-        foreach (var properties in pointProperties)
+        var pointsControllerClient = new PointsControllerClient();
+        var response = await pointsControllerClient.GetAllPoints(1, 1);
+        if (response is null)
+        {
+            return;
+        }
+        foreach (var properties in response.Value.points.Select(Map))
         {
             switch (properties.PointClass)
             {
@@ -162,27 +163,4 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         points.ForEach(x => pointsProperties.Add(x.pointProperties));
         ioFile.Write(pointsProperties);
     }*/
-
-    private IEnumerator GetAllPoints(Action<IEnumerable<PointProperty>> callback)
-    {
-        var webRequest = PrepareGetRequest();
-        yield return webRequest.SendWebRequest();
-        if (!webRequest.isDone)
-        {
-            yield break;
-        }
-        
-        var response =
-            JsonUtility.FromJson<GetAllPointsResponse>("{\"points\":" + webRequest.downloadHandler.text + "}");
-        var points = response.points.Select(Map);
-        callback(points);
-    }
-
-    private UnityWebRequest PrepareGetRequest()
-    {
-        var request = UnityWebRequest.Get("http://195.54.14.121:8086/api/building/1/floor/1/point");
-        request.SetRequestHeader("accept", "*/*");
-        request.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
-        return request;
-    }
 }
