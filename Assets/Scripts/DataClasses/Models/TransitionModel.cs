@@ -1,9 +1,15 @@
-﻿using System;
+﻿using Assets.Scripts.DataClasses.Models.Types;
+using DataClasses.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DataClasses.Models
+namespace Assets.Scripts.DataClasses.Models
 {
     [Serializable]
-    public struct TransitionModel
+    public class TransitionModel
     {
         public int id;
         public TransitionTypeModel transitionType;
