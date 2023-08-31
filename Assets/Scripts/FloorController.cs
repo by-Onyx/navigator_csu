@@ -1,3 +1,4 @@
+using Assets.Scripts.MoveLogic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,14 @@ public class FloorController : MonoBehaviour
     [SerializeField] GameObject second_floor_grid;
     [SerializeField] GameObject third_floor_grid;
     [SerializeField] GameObject fourth_floor_grid;
+    [SerializeField] AgentMovement agent_movement;
+
+    private bool firstPoint;
 
     public void ShowGroundFloor()
     {
+        firstPoint = true;
+        agent_movement.drawPath.DeleteLine();
         print("нажата кнопка 0");
         Actives.groundFloor = true;
         Actives.firstFloor = false;
@@ -29,11 +35,14 @@ public class FloorController : MonoBehaviour
         third_floor_grid.SetActive(Actives.thirdFloor);
         fourth_floor_grid.SetActive(Actives.fourthFloor);
         ground.SetActive(Actives.ground);
-        ground_for_ground.SetActive(Actives.ground_for_ground);
+        ground_for_ground.SetActive(Actives.ground);
         Actives.floorSwitch = true;
+        CreatePath(-15, -05);
     }
     public void ShowFirstFloor()
     {
+        firstPoint = true;
+        agent_movement.drawPath.DeleteLine();
         print("нажата кнопка 1");
         Actives.groundFloor = false;
         Actives.firstFloor = true;
@@ -50,9 +59,12 @@ public class FloorController : MonoBehaviour
         ground.SetActive(Actives.ground);
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
+        CreatePath(-25, -15);
     }
     public void ShowSecondFloor()
     {
+        firstPoint = true;
+        agent_movement.drawPath.DeleteLine();
         print("нажата кнопка 2");
         Actives.groundFloor = false;
         Actives.firstFloor = false;
@@ -69,9 +81,12 @@ public class FloorController : MonoBehaviour
         ground.SetActive(Actives.ground);
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
+        CreatePath(-35, -25);
     }
     public void ShowThirdFloor()
     {
+        firstPoint = true;
+        agent_movement.drawPath.DeleteLine();
         print("нажата кнопка 3");
         Actives.groundFloor = false;
         Actives.firstFloor = false;
@@ -88,9 +103,12 @@ public class FloorController : MonoBehaviour
         ground.SetActive(Actives.ground);
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
+        CreatePath(-45, -35);
     }
     public void ShowFourthFloor()
     {
+        firstPoint = true;
+        agent_movement.drawPath.DeleteLine();
         print("нажата кнопка 4");
         Actives.groundFloor = false;
         Actives.firstFloor = false;
@@ -107,5 +125,28 @@ public class FloorController : MonoBehaviour
         ground.SetActive(Actives.ground);
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
+        CreatePath(-55, -45);
+    }
+
+    private void CreatePath(int startZ, int endZ)
+    {
+        foreach (var line in DrawPath.lineSegments)
+        {
+            if (line.Key > startZ && line.Key < endZ)
+            {
+                foreach (var point in line.Value)
+                {
+                    if (firstPoint)
+                    {
+                        agent_movement.drawPath.Init(point);
+                        firstPoint = false;
+                    }
+                    else
+                    {
+                        agent_movement.drawPath.AddAPoint(point);
+                    }
+                }
+            }
+        }
     }
 }

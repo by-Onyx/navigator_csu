@@ -12,13 +12,16 @@ namespace Assets.Scripts.MoveLogic
     {
         [SerializeField] private LineRenderer line;
         private LineRenderer path;
-        
-        private Vector3 lastPos;
+        public static Dictionary<int, Vector3[]> lineSegments = new Dictionary<int, Vector3[]>();
 
         public void Init(Vector3 pos)
         {
             CreateBrush(pos);
-            //path.GetPositions();
+        }
+
+        public void DeleteLine()
+        {
+            Destroy(path);
         }
 
         private void CreateBrush(Vector3 pos)
@@ -28,19 +31,28 @@ namespace Assets.Scripts.MoveLogic
             path.SetPosition(1, pos);
         }
 
-        private void AddAPoint(Vector3 pointPos)
+        public void AddAPoint(Vector3 pointPos)
         {
             path.positionCount++;
             int positionIndex = path.positionCount - 1;
             path.SetPosition(positionIndex, pointPos);
         }
 
-        public void PointToPos(Vector3[] position)
+        public void SetPath(Vector3[] points)
         {
-            foreach (var point in position)
+            List<Vector3> currentSegment = new List<Vector3>();
+
+            foreach (var point in points)
             {
-                AddAPoint(point);
+                if (currentSegment.Count > 0 && ((int)currentSegment[currentSegment.Count - 1].z) != ((int)point.z))
+                {
+                    lineSegments.Add((int)Math.Round(currentSegment[0].z), currentSegment.ToArray());
+                    currentSegment.Clear();
+                }
+
+                currentSegment.Add(point);
             }
+            lineSegments.Add((int)currentSegment[0].z, currentSegment.ToArray());
         }
     }
 }

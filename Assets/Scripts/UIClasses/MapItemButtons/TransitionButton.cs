@@ -13,7 +13,6 @@ namespace Assets.Scripts.UIClasses.MapItemButtons
     public class TransitionButton : MapItemButton
     {
         public TransitionProperties TransitionProperties { get; private set; }
-        private Connection connection = Connection.GetInstance();
 
         public void Init(Transition transition, PopupTransitionPanel popup)
         {
@@ -27,15 +26,8 @@ namespace Assets.Scripts.UIClasses.MapItemButtons
         {
             mapItemButton.onClick.AddListener(delegate
             {
-                if(connection.isConnectionProcess)
-                {
-                    connection.TransitionButtons.Add(this);
-                }
-                else
-                {
-                    popup.gameObject.transform.SetAsLastSibling();
-                    popup.gameObject.SetActive(true);
-                }
+                popup.gameObject.transform.SetAsLastSibling();
+                popup.gameObject.SetActive(true);
             });
         }
     }
