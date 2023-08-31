@@ -1,6 +1,7 @@
 using Assets.Scripts.MoveLogic;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,7 +25,8 @@ public class agent_movement : MonoBehaviour
         if (agent.hasPath && !isPathComplete)
         {
             isPathComplete = true;
-            drawPath.PointToMousePos(agent.path.corners);
+            agent.path.corners.ToList().ForEach(x => Debug.Log($"{x.x};{x.y},{x.z}"));
+            drawPath.PointToPos(agent.path.corners);
         }
     }
 }
