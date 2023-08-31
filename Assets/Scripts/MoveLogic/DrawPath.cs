@@ -10,17 +10,20 @@ namespace Assets.Scripts.MoveLogic
 {
     public class DrawPath : MonoBehaviour
     {
-        [SerializeField] private LineRenderer path;
+        [SerializeField] private LineRenderer line;
+        private LineRenderer path;
         
         private Vector3 lastPos;
 
         public void Init(Vector3 pos)
         {
             CreateBrush(pos);
+            //path.GetPositions();
         }
 
         private void CreateBrush(Vector3 pos)
         {
+            path = Instantiate(line);
             path.SetPosition(0, pos);
             path.SetPosition(1, pos);
         }
@@ -32,18 +35,12 @@ namespace Assets.Scripts.MoveLogic
             path.SetPosition(positionIndex, pointPos);
         }
 
-        public void PointToMousePos(Vector3[] position)
+        public void PointToPos(Vector3[] position)
         {
-            /*if (lastPos != position)
-            {
-                AddAPoint(position);
-                lastPos = position;
-            }*/
             foreach (var point in position)
             {
                 AddAPoint(point);
             }
-            
         }
     }
 }

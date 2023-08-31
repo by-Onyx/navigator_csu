@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 public class MainWindow : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private Image pointPlace;
+    [SerializeField] private Grid world;
 
     [SerializeField] private PopupPointPanel popupPointPanel;
     [SerializeField] private PopupTransitionPanel popupTransitionPanel;
@@ -72,7 +72,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     private void AddPointToCanvas(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, getPosition(), rotation, transform);
+        var button = Instantiate(pointButton, getPosition(), rotation, world.transform);
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty);
 
@@ -82,7 +82,7 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     private void AddTransitionToCanvas(Transition transition)
     {
         var popup = Instantiate(popupTransitionPanel, transform);
-        var button = Instantiate(transitionButton, getPosition(), rotation, transform);
+        var button = Instantiate(transitionButton, getPosition(), rotation, world.transform);
 
         button.Init(transition, popup);
         popup.Init(button, transition.TransitionPopupProperty);
@@ -153,8 +153,11 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.pointerCurrentRaycast.gameObject.Equals(pointPlace.gameObject))
+        print(123);
+        if (eventData.pointerCurrentRaycast.gameObject.Equals(world.gameObject))
         {
+            print(1);
+
             CreatePoint();
         }
     }
