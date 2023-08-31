@@ -28,7 +28,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
 
     // private IOFileWork ioFile = new IOFileWork(@"\file.json");
-    private Connection connection = Connection.GetInstance();
     private List<PointButton> pointButtons = new List<PointButton>();
     private List<TransitionButton> transitionButtons = new List<TransitionButton>();
     private Quaternion rotation = new Quaternion();
@@ -37,7 +36,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         pointDropdown.Init();
         transitionDropdown.Init();
-        connectButton.onClick.AddListener(() => { Connect(); });
         // StartWithPoints();
     }
 
@@ -89,27 +87,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         popup.Init(button, transition.TransitionPopupProperty);
 
         transitionButtons.Add(button);
-    }
-
-    private void Connect()
-    {
-        if (connection.ConnectionProcess())
-        {
-            HideAllTransitions();
-        }
-        else
-        {
-            ConnectAllTransitions();
-            ShowAllTransitions();
-        }
-    }
-
-    private void ConnectAllTransitions()
-    {
-        var transitionButtons = connection.TransitionButtons;
-        Debug.Log(transitionButtons.Count);
-        AddTransitionToEachOther(transitionButtons);
-        connection.TransitionButtons.Clear();
     }
 
     private static void AddTransitionToEachOther(List<TransitionButton> transitionButtons)
