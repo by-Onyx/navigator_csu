@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
+﻿using Assets.Scripts.DataClasses.Models.Types;
+using Assets.Scripts.DataClasses.Properties.MapItemPopupProperties;
 using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using UnityEngine;
 
@@ -8,7 +9,11 @@ namespace Assets.Scripts.MapItems.Transitions
     {
         public Toilet() : base()
         {
-            TransitionProperties.TransitionClass = 3;
+            TransitionProperties.TransitionType = new TransitionTypeModel()
+            {
+                id = 3,
+                name = "Туалет",
+            };
         }
 
         public Toilet(TransitionProperties transitionProperties) : base(transitionProperties) { }

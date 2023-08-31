@@ -1,9 +1,8 @@
-﻿using System.Text;
-using System.Threading.Tasks;
-using Assets.Scripts.DataClasses.Models.Responses;
+﻿using Assets.Scripts.DataClasses.Models.Responses;
 using DataClasses;
 using DataClasses.Models.Requests;
-using DataClasses.Models.Responses;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -15,7 +14,7 @@ namespace ControllerClients
         {
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition";
             using var www = UnityWebRequest.Get(url);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
 
@@ -33,7 +32,7 @@ namespace ControllerClients
                     JsonUtility.FromJson<GetAllTransitionsResponse>("{\"transitions\":" + responseJson + "}");
                 return response;
             }
-            
+
             Debug.Log(www.error);
             return null;
         }
@@ -46,11 +45,11 @@ namespace ControllerClients
         {
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition";
             using var www = UnityWebRequest.Post(url, new WWWForm());
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
             www.SetRequestHeader("Authorization", "Bearer " + Config.JwtToken);
-            
+
             var json = JsonUtility.ToJson(request);
             var jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -67,7 +66,7 @@ namespace ControllerClients
             {
                 return true;
             }
-            
+
             Debug.Log(www.error);
             return false;
         }
@@ -82,7 +81,7 @@ namespace ControllerClients
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition/{transitionId}";
             var requestJson = JsonUtility.ToJson(request);
             using var www = UnityWebRequest.Put(url, requestJson);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
             www.SetRequestHeader("Authorization", "Bearer " + Config.JwtToken);
@@ -98,7 +97,7 @@ namespace ControllerClients
             {
                 return true;
             }
-            
+
             Debug.Log(www.error);
             return false;
         }
@@ -112,7 +111,7 @@ namespace ControllerClients
             var url =
                 $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition/{transitionId}";
             using var www = UnityWebRequest.Delete(url);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
             www.SetRequestHeader("Authorization", "Bearer " + Config.JwtToken);
@@ -128,7 +127,7 @@ namespace ControllerClients
             {
                 return true;
             }
-            
+
             Debug.Log(www.error);
             return false;
         }

@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using Assets.Scripts.MapItems.Transitions;
-using Assets.Scripts.UIClasses.Popups;
 using UIClasses.Popups;
 
 namespace UIClasses.MapItemButtons
@@ -12,7 +11,8 @@ namespace UIClasses.MapItemButtons
         public void Init(Transition transition, PopupTransitionPanel popup)
         {
             this.TransitionProperties = transition.TransitionProperties;
-
+            TransitionProperties.X = gameObject.transform.position.x;
+            TransitionProperties.Y = gameObject.transform.position.y;
             SetPointProperties(transition.UIProperties);
             SetActionOnClick(popup);
         }

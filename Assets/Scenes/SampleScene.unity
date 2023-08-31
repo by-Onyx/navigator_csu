@@ -1448,6 +1448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointPlace: {fileID: 2098764700}
   closeButton: {fileID: 1922592165}
+  saveAllButton: {fileID: 1690223214}
   popupPointPanel: {fileID: 379991879}
   popupTransitionPanel: {fileID: 339403650}
   popupMenuPanel: {fileID: 1451497420}

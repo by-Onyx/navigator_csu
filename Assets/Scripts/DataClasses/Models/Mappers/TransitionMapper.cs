@@ -1,9 +1,4 @@
 ﻿using Assets.Scripts.DataClasses.Properties.MapItemProperties;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Scripts.DataClasses.Models.Mappers
 {
@@ -14,7 +9,7 @@ namespace Assets.Scripts.DataClasses.Models.Mappers
             return new TransitionProperties
             {
                 Id = model.id,
-                TransitionClass = model.transitionType.id,
+                TransitionType = model.transitionType,
                 X = model.x,
                 Y = model.y
             };

@@ -15,7 +15,7 @@ namespace Assets.Scripts.MapItems.Transitions
             TransitionProperties = new TransitionProperties();
         }
 
-        protected Transition(TransitionProperties transitionProperties) : base() 
+        protected Transition(TransitionProperties transitionProperties) : base()
         {
             TransitionProperties = transitionProperties;
         }

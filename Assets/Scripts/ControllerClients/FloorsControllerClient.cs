@@ -1,6 +1,6 @@
-﻿using System.Text;
+﻿using DataClasses.Models.Responses;
+using System.Text;
 using System.Threading.Tasks;
-using DataClasses.Models.Responses;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -10,10 +10,10 @@ namespace ControllerClients
     {
         public async Task<GetAllFloorsResponse?> GetAllFloors(int buildingId = 1)
         {
-            
+
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor";
             using var www = UnityWebRequest.Get(url);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
 
@@ -31,7 +31,7 @@ namespace ControllerClients
                     JsonUtility.FromJson<GetAllFloorsResponse>("{\"floors\":" + responseJson + "}");
                 return response;
             }
-            
+
             Debug.Log(www.error);
             return null;
         }

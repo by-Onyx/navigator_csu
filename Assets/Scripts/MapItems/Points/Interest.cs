@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.DataClasses.Properties;
+using DataClasses.Models;
 using DataClasses.Properties.MapItemProperties;
 using UnityEngine;
 
@@ -8,7 +9,11 @@ namespace Assets.Scripts.MapItems.Points
     {
         public Interest() : base()
         {
-            PointProperty.PointClass = 2;
+            PointProperty.PointType = new PointTypeModel()
+            {
+                id = 1,
+                name = "Точка интереса"
+            };
         }
 
         public Interest(PointProperty pointProperty) : base(pointProperty) { }

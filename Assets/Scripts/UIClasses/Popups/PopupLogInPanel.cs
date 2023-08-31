@@ -17,15 +17,15 @@ namespace UIClasses.Popups
         [SerializeField] private ErrorLoginPanel errorPanel;
         [SerializeField] private MenuAdminPanel menuAdminPanel;
         [SerializeField] private MenuUserPanel menuUserPanel;
-        
-        private void Awake() 
+
+        private void Awake()
             => loginButton.onClick.AddListener(Enter);
 
         private async void Enter()
         {
             var loginControllerClient = new LoginControllerClient();
             var response = await loginControllerClient.LogIn(new LoginRequest
-                { login = login.text, password = password.text });
+            { login = login.text, password = password.text });
             if (response is not null)
             {
                 Debug.Log(response.Value.token);
@@ -40,7 +40,7 @@ namespace UIClasses.Popups
                 errorPanel.gameObject.transform.SetAsLastSibling();
                 errorPanel.gameObject.SetActive(true);
             }
-            
+
         }
     }
 }

@@ -9,6 +9,7 @@ namespace DataClasses.Models.Requests
         public PointTypeModel pointType;
         public string firstField;
         public string secondField;
+        public string thirdField;
         public float x;
         public float y;
     }

@@ -1,8 +1,8 @@
-﻿using System.Text;
-using System.Threading.Tasks;
-using DataClasses;
+﻿using DataClasses;
 using DataClasses.Models.Requests;
 using DataClasses.Models.Responses;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -14,7 +14,7 @@ namespace ControllerClients
         {
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point";
             using var www = UnityWebRequest.Get(url);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
 
@@ -31,23 +31,23 @@ namespace ControllerClients
                 var response = JsonUtility.FromJson<GetAllPointsResponse>("{\"points\":" + responseJson + "}");
                 return response;
             }
-            
+
             Debug.Log(www.error);
             return null;
         }
 
         public async Task<bool> CreatePoint(
-            CreatePointRequest request, 
-            int buildingId, 
+            CreatePointRequest request,
+            int buildingId,
             int floorNumber)
         {
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point";
             using var www = UnityWebRequest.Post(url, new WWWForm());
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
             www.SetRequestHeader("Authorization", "Bearer " + Config.JwtToken);
-            
+
             var json = JsonUtility.ToJson(request);
             var jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -64,7 +64,7 @@ namespace ControllerClients
             {
                 return true;
             }
-            
+
             Debug.Log(www.error);
             return false;
         }
@@ -79,7 +79,7 @@ namespace ControllerClients
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point/{pointId}";
             var requestJson = JsonUtility.ToJson(request);
             using var www = UnityWebRequest.Put(url, requestJson);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
             www.SetRequestHeader("Authorization", "Bearer " + Config.JwtToken);
@@ -95,7 +95,7 @@ namespace ControllerClients
             {
                 return true;
             }
-            
+
             Debug.Log(www.error);
             return false;
         }
@@ -108,7 +108,7 @@ namespace ControllerClients
         {
             var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point/{pointId}";
             using var www = UnityWebRequest.Delete(url);
-            
+
             www.SetRequestHeader("accept", "*/*");
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
             www.SetRequestHeader("Authorization", "Bearer " + Config.JwtToken);
@@ -124,7 +124,7 @@ namespace ControllerClients
             {
                 return true;
             }
-            
+
             Debug.Log(www.error);
             return false;
         }

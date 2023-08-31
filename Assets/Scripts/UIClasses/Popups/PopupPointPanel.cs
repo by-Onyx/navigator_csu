@@ -1,6 +1,6 @@
 using Assets.Scripts.DataClasses.Properties;
-using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using DataClasses.Properties.MapItemProperties;
+using System.Collections.Generic;
 using TMPro;
 using UIClasses.MapItemButtons;
 using UnityEngine;
@@ -18,12 +18,12 @@ namespace UIClasses.Popups
 
         [SerializeField] private Button deleteBtn;
 
-        public void Init(PointButton buttonPoint, PointPopupProperty pointPopupProperty)
+        public void Init(PointButton buttonPoint, PointPopupProperty pointPopupProperty, List<PointProperty> deletedPoints)
         {
             SetFields(buttonPoint.PointProperties);
             SetHints(pointPopupProperty);
 
-            deleteBtn.onClick.AddListener(() => OnDeletePress(buttonPoint));
+            deleteBtn.onClick.AddListener(() => OnDeletePress(buttonPoint, deletedPoints));
         }
 
         private void SetFields(PointProperty property)
@@ -42,10 +42,18 @@ namespace UIClasses.Popups
             fieldThird.placeholder.GetComponent<TextMeshProUGUI>().text = property.FieldHintThird;
         }
 
-        private void OnDeletePress(PointButton point)
+        private void OnDeletePress(PointButton point, List<PointProperty> deletedPoints)
         {
-            Destroy(point);
+            deletedPoints.Add(point.PointProperties);
+            Destroy(point.gameObject);
             Destroy(gameObject);
+        }
+
+        public void SetPropertiesFields(PointProperty pointProperty)
+        {
+            pointProperty.TextFirst = fieldFirst.text;
+            pointProperty.TextSecond = fieldSecond.text;
+            pointProperty.TextThird = fieldThird.text;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.DataClasses.Properties;
-using System.Reflection.Emit;
 
 namespace Assets.Scripts.MapItems
 {
@@ -9,9 +8,9 @@ namespace Assets.Scripts.MapItems
 
         public MapItem()
         {
+            this.UIProperties = new UIProperty();
             LoadSprite();
             SetFields();
-            this.UIProperties = new UIProperty();
         }
 
         public abstract void LoadSprite();
