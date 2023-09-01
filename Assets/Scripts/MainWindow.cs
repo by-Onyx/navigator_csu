@@ -42,8 +42,16 @@ public class MainWindow : MonoBehaviour
 
     private void Update()
     {
+<<<<<<< HEAD
+        
+        Debug.Log("cccc");
         if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0))
         {
+            Debug.Log("aaaa");
+=======
+        if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0))
+        {
+>>>>>>> main
             CreatePoint();
         }
     }
