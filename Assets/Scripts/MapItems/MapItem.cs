@@ -9,6 +9,11 @@ namespace Assets.Scripts.MapItems
         public MapItem()
         {
             this.UIProperties = new UIProperty();
+            LoadSprite();
+            SetFields();
         }
+
+        public abstract void LoadSprite();
+        public abstract void SetFields();
     }
 }

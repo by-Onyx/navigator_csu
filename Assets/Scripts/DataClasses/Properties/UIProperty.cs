@@ -4,6 +4,6 @@ namespace Assets.Scripts.DataClasses.Properties
 {
     public class UIProperty
     {
-        public Color Color;
+        public Sprite Sprite;
     }
 }

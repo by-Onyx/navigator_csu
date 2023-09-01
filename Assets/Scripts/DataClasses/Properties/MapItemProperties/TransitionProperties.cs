@@ -1,13 +1,10 @@
-﻿using Assets.Scripts.UIClasses.MapItemButtons;
-using System;
-using System.Collections.Generic;
+﻿using Assets.Scripts.DataClasses.Models.Types;
 
 namespace Assets.Scripts.DataClasses.Properties.MapItemProperties
 {
     public class TransitionProperties : MapItemProperty
     {
-        public int TransitionClass;
-        public List<TransitionButton> ConnectedTransitionButtons { get; private set; } = new List<TransitionButton>();
+        public TransitionTypeModel TransitionType;
 
         public TransitionProperties() { }
 
