@@ -11,9 +11,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MainWindow : MonoBehaviour, IPointerClickHandler
+public class MainWindow : MonoBehaviour
 {
     [SerializeField] private Canvas pointPlaceImage;
+    [SerializeField] private Image image;
 
     [SerializeField] private PopupPointPanel popupPointPanel;
     [SerializeField] private PopupTransitionPanel popupTransitionPanel;
@@ -37,6 +38,17 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
         pointDropdown.Init();
         transitionDropdown.Init();
         // StartWithPoints();
+    }
+
+    private void Update()
+    {
+        
+        Debug.Log("cccc");
+        if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0))
+        {
+            Debug.Log("aaaa");
+            CreatePoint();
+        }
     }
 
     /*private void StartWithPoints()
@@ -64,7 +76,9 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
 
     private Vector3 getPosition()
     {
-        return Input.mousePosition;
+        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        pos.z = -90;
+        return pos;
     }
 
     private void AddPointToCanvas(Point point)
@@ -128,14 +142,6 @@ public class MainWindow : MonoBehaviour, IPointerClickHandler
     {
         buttonClicked = buttonClicked != clicked ? clicked : OptionSelect.NothingSelected;
     }*/
-
-    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.pointerCurrentRaycast.gameObject.Equals(pointPlaceImage.gameObject))
-        {
-            CreatePoint();
-        }
-    }
 
     private void CreatePoint()
     {
