@@ -40,6 +40,7 @@ namespace Assets.Scripts.MoveLogic
 
         public void SetPath(Vector3[] points)
         {
+            lineSegments.Clear();
             List<Vector3> currentSegment = new List<Vector3>();
 
             foreach (var point in points)
@@ -52,7 +53,7 @@ namespace Assets.Scripts.MoveLogic
 
                 currentSegment.Add(point);
             }
-            lineSegments.Add((int)currentSegment[0].z, currentSegment.ToArray());
+            lineSegments.Add((int)Math.Round(currentSegment[0].z), currentSegment.ToArray());
         }
     }
 }

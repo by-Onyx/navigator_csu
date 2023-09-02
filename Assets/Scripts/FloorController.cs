@@ -14,9 +14,14 @@ public class FloorController : MonoBehaviour
     [SerializeField] GameObject second_floor_grid;
     [SerializeField] GameObject third_floor_grid;
     [SerializeField] GameObject fourth_floor_grid;
-    [SerializeField] AgentMovement agent_movement;
+    private AgentMovement agent_movement;
 
     private bool firstPoint;
+
+    public void Init(AgentMovement agentMovement)
+    {
+        this.agent_movement = agentMovement;
+    }
 
     public void ShowGroundFloor()
     {

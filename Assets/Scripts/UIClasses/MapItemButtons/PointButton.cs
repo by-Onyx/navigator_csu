@@ -17,7 +17,6 @@ namespace UIClasses.MapItemButtons
             popupPointPanel = popup;
             SetPointProperties(point.UIProperties);
             SetActionOnClick(popup);
-            SetTextFields();
         }
 
         protected void SetActionOnClick(PopupPointPanel popup)

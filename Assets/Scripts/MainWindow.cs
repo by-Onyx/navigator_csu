@@ -16,6 +16,8 @@ using static Assets.Scripts.DataClasses.Models.Mappers.TransitionMapper;
 using Unity.VisualScripting;
 using DataClasses.Properties.MapItemProperties;
 using Assets.Scripts.DataClasses.Properties.MapItemProperties;
+using System.Threading;
+using System.IO;
 
 public class MainWindow : MonoBehaviour
 {
@@ -36,12 +38,20 @@ public class MainWindow : MonoBehaviour
 
     [SerializeField] private SearchSuggestion searchSuggestion;
 
+    [SerializeField] private AgentMovement agentMovement;
+
+    [SerializeField] private InputField pathFrom;
+    [SerializeField] private InputField pathTo;
+
+    [SerializeField] private FloorController floorController;
+
     private List<PointButton> pointButtons = new();
     private List<TransitionButton> transitionButtons = new();
     private List<PointProperty> deletedPoints = new();
     private List<TransitionProperties> deletedTransitions = new();
     private List<string> names = new();
     private Quaternion rotation = new Quaternion();
+    private bool isAppActive = true;
 
     private TransitionsControllerClient transitionsControllerClient = new TransitionsControllerClient();
     private PointsControllerClient pointsControllerClient = new PointsControllerClient();
@@ -53,14 +63,24 @@ public class MainWindow : MonoBehaviour
         closeButton.onClick.AddListener(CloseMenu);
         saveAllButton.onClick.AddListener(SaveAll);
         StartWithAPI();
+        floorController.Init(agentMovement);
         searchSuggestion.Init(names);
     }
 
     private void Update()
     {
+        if (isAppActive)
+        {
+            if(pointButtons.Count != 0)
+            {
+                isAppActive = false;
+            }
+            RenderPointOnCurrentFloor();
+        }
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             CreatePoint();
+            RenderPointOnCurrentFloor();
         }
     }
 
@@ -151,7 +171,7 @@ public class MainWindow : MonoBehaviour
     private void AddPointFromAPI(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y), rotation, pointPlace.transform);
+        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -90), rotation, pointPlace.transform);
 
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty, deletedPoints);
@@ -175,7 +195,7 @@ public class MainWindow : MonoBehaviour
     private void AddTransitionFromAPI(Transition transition)
     {
         var popup = Instantiate(popupTransitionPanel, transform);
-        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y), rotation, pointPlace.transform);
+        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y, -90), rotation, pointPlace.transform);
 
         button.Init(transition, popup);
         popup.Init(button, transition.TransitionPopupProperty, deletedTransitions);
@@ -191,14 +211,7 @@ public class MainWindow : MonoBehaviour
 
     private void TransitionVisible()
     {
-        if (popupMenuPanel.IsTransitionVisible)
-        {
-            transitionButtons.ForEach(x => x.gameObject.SetActive(false));
-        }
-        else
-        {
-            transitionButtons.ForEach(x => x.gameObject.SetActive(true));
-        }
+        transitionButtons.ForEach(x => x.gameObject.SetActive(!popupMenuPanel.IsTransitionVisible));
     }
 
     public void RenderPointOnCurrentFloor()
@@ -206,7 +219,6 @@ public class MainWindow : MonoBehaviour
         pointButtons.ForEach(x => x.gameObject.SetActive(false));
         transitionButtons.ForEach(x => x.gameObject.SetActive(false));
         var floor = (byte)FloorSelectUse.Floor;
-        print(floor);
 
         pointButtons
             .Where(x => x.PointProperties.FloorNumber == floor)
@@ -252,6 +264,25 @@ public class MainWindow : MonoBehaviour
             case OptionSelect.NothingSelected:
                 break;
         }
+    }
+
+    public void DrawPath()
+    {
+        if (string.IsNullOrEmpty(pathFrom.text) || string.IsNullOrEmpty(pathTo.text)) return;
+
+        var point = pointButtons
+            .Where(x => x.PointProperties.TextFirst == pathFrom.text)
+            .Select(x => x.PointProperties)
+            .FirstOrDefault();
+        Vector3 start = new Vector3(point.X, point.Y, point.FloorNumber);
+
+        point = pointButtons
+            .Where(x => x.PointProperties.TextFirst == pathTo.text)
+            .Select(x => x.PointProperties)
+            .FirstOrDefault();
+        Vector3 end = new Vector3(point.X, point.Y, point.FloorNumber);
+
+        agentMovement.Init(start, end);
     }
 
     private void SaveAll()
