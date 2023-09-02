@@ -1,3 +1,4 @@
+using Assets.Scripts.DataClasses;
 using Assets.Scripts.MoveLogic;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +39,8 @@ public class FloorController : MonoBehaviour
         ground_for_ground.SetActive(Actives.ground);
         Actives.floorSwitch = true;
         CreatePath(-15, -05);
+
+        FloorSelectUse.Floor = FloorSelect.ZeroFloor;
     }
     public void ShowFirstFloor()
     {
@@ -60,6 +63,8 @@ public class FloorController : MonoBehaviour
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
         CreatePath(-25, -15);
+
+        FloorSelectUse.Floor = FloorSelect.FirstFloor;
     }
     public void ShowSecondFloor()
     {
@@ -82,6 +87,8 @@ public class FloorController : MonoBehaviour
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
         CreatePath(-35, -25);
+
+        FloorSelectUse.Floor = FloorSelect.SecondFloor;
     }
     public void ShowThirdFloor()
     {
@@ -104,6 +111,8 @@ public class FloorController : MonoBehaviour
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
         CreatePath(-45, -35);
+
+        FloorSelectUse.Floor = FloorSelect.ThirdFloor;
     }
     public void ShowFourthFloor()
     {
@@ -126,6 +135,8 @@ public class FloorController : MonoBehaviour
         ground_for_ground.SetActive(Actives.ground_for_ground);
         Actives.floorSwitch = true;
         CreatePath(-55, -45);
+
+        FloorSelectUse.Floor = FloorSelect.FourthFloor;
     }
 
     private void CreatePath(int startZ, int endZ)

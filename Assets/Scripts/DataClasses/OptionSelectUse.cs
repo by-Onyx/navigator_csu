@@ -2,6 +2,6 @@
 {
     public static class OptionSelectUse
     {
-        public static OptionSelect Option;
+        public static OptionSelect Option { get; set; }
     }
 }

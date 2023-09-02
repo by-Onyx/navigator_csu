@@ -7,6 +7,8 @@
         public float X;
         public float Y;
 
+        public int FloorNumber;
+
         public MapItemProperty() { }
 
         protected MapItemProperty(float x, float y)

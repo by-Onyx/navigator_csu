@@ -1,23 +1,32 @@
-using Assets.Scripts;
 using Assets.Scripts.DataClasses;
 using Assets.Scripts.MapItems.Points;
 using Assets.Scripts.MapItems.Transitions;
 using Assets.Scripts.UIClasses;
-using Assets.Scripts.UIClasses.MapItemButtons;
 using Assets.Scripts.UIClasses.Popups;
-using System;
+using ControllerClients;
 using System.Collections.Generic;
+using System.Linq;
+using UIClasses.MapItemButtons;
+using UIClasses.Popups;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static DataClasses.PointMapper;
+using static Assets.Scripts.DataClasses.Models.Mappers.TransitionMapper;
+using Unity.VisualScripting;
+using DataClasses.Properties.MapItemProperties;
+using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 
 public class MainWindow : MonoBehaviour
 {
-    [SerializeField] private Canvas pointPlaceImage;
-    [SerializeField] private Image image;
+    [SerializeField] private Canvas pointPlace;
+
+    [SerializeField] private Button closeButton;
+    [SerializeField] private Button saveAllButton;
 
     [SerializeField] private PopupPointPanel popupPointPanel;
     [SerializeField] private PopupTransitionPanel popupTransitionPanel;
+    [SerializeField] private PopupMenuPanel popupMenuPanel;
 
     [SerializeField] private PointButton pointButton;
     [SerializeField] private TransitionButton transitionButton;
@@ -25,61 +34,100 @@ public class MainWindow : MonoBehaviour
     [SerializeField] private AbstractDropdown pointDropdown;
     [SerializeField] private AbstractDropdown transitionDropdown;
 
-    [SerializeField] private Button connectButton;
+    [SerializeField] private SearchSuggestion searchSuggestion;
 
-
-    // private IOFileWork ioFile = new IOFileWork(@"\file.json");
-    private List<PointButton> pointButtons = new List<PointButton>();
-    private List<TransitionButton> transitionButtons = new List<TransitionButton>();
+    private List<PointButton> pointButtons = new();
+    private List<TransitionButton> transitionButtons = new();
+    private List<PointProperty> deletedPoints = new();
+    private List<TransitionProperties> deletedTransitions = new();
+    private List<string> names = new();
     private Quaternion rotation = new Quaternion();
+
+    private TransitionsControllerClient transitionsControllerClient = new TransitionsControllerClient();
+    private PointsControllerClient pointsControllerClient = new PointsControllerClient();
 
     private void Awake()
     {
         pointDropdown.Init();
         transitionDropdown.Init();
-        // StartWithPoints();
+        closeButton.onClick.AddListener(CloseMenu);
+        saveAllButton.onClick.AddListener(SaveAll);
+        StartWithAPI();
+        searchSuggestion.Init(names);
     }
 
     private void Update()
     {
-<<<<<<< HEAD
-        
-        Debug.Log("cccc");
-        if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log("aaaa");
-=======
-        if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0))
-        {
->>>>>>> main
             CreatePoint();
         }
     }
 
-    /*private void StartWithPoints()
+    private async void StartWithAPI()
     {
-        var propertiesList = ioFile.Read();
-        foreach (var properties in propertiesList.Points)
+        FloorsControllerClient floorsController = new FloorsControllerClient();
+        var response = await floorsController.GetAllFloors();
+        if (response is null)
         {
-            switch (properties.PointClass)
+            return;
+        }
+        foreach (var floor in response.Value.floors)
+        {
+            StartWithPoints(floor.id);
+            StartWithTransitions(floor.id);
+        }
+    }
+
+    private async void StartWithPoints(int floorId)
+    {
+        var response = await pointsControllerClient.GetAllPoints(1, floorId);
+        if (response is null)
+        {
+            return;
+        }
+        foreach (var properties in response.Value.points.Select(MapPoint))
+        {
+            properties.FloorNumber = floorId;
+            names.Add(properties.TextFirst);
+            switch (properties.PointType.id)
             {
                 case 1:
-                    AddPointToCanvas(new Cabinet(properties, OpenPopupCabinet));
+                    AddPointFromAPI(new Cabinet(properties));
                     break;
                 case 2:
-                    AddPointToCanvas(new Interest(properties, OpenPopupCabinet));
+                    AddPointFromAPI(new Interest(properties));
                     break;
-                case 3:
-                    AddPointToCanvas(new Ladder(properties, OpenPopupCabinet));
-                    break;
-                default:
-                    break;
-
             }
         }
-    }*/
+    }
 
-    private Vector3 getPosition()
+    private async void StartWithTransitions(int floorId)
+    {
+        var response = await transitionsControllerClient.GetAllTransitions(1, floorId);
+        if (response is null)
+        {
+            return;
+        }
+        foreach (var properties in response.Value.transitions.Select(MapTransition))
+        {
+            properties.FloorNumber = floorId;
+            switch (properties.TransitionType.id)
+            {
+                case 1:
+                    AddTransitionFromAPI(new Ladder(properties));
+                    break;
+                case 2:
+                    AddTransitionFromAPI(new Elevator(properties));
+                    break;
+                case 3:
+                    AddTransitionFromAPI(new Toilet(properties));
+                    break;
+            }
+        }
+    }
+
+    private Vector3 GetPosition()
     {
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pos.z = -90;
@@ -89,10 +137,24 @@ public class MainWindow : MonoBehaviour
     private void AddPointToCanvas(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, getPosition(), rotation, pointPlaceImage.transform);
+        var button = Instantiate(pointButton, GetPosition(), rotation, pointPlace.transform);
 
         button.Init(point, popup);
-        popup.Init(button, point.PointPopupProperty);
+        popup.Init(button, point.PointPopupProperty, deletedPoints);
+
+        button.PointProperties.FloorNumber = (byte)FloorSelectUse.Floor;
+        print((byte)FloorSelectUse.Floor);
+
+        pointButtons.Add(button);
+    }
+
+    private void AddPointFromAPI(Point point)
+    {
+        var popup = Instantiate(popupPointPanel, transform);
+        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y), rotation, pointPlace.transform);
+
+        button.Init(point, popup);
+        popup.Init(button, point.PointPopupProperty, deletedPoints);
 
         pointButtons.Add(button);
     }
@@ -100,53 +162,73 @@ public class MainWindow : MonoBehaviour
     private void AddTransitionToCanvas(Transition transition)
     {
         var popup = Instantiate(popupTransitionPanel, transform);
-        var button = Instantiate(transitionButton, getPosition(), rotation, pointPlaceImage.transform);
+        var button = Instantiate(transitionButton, GetPosition(), rotation, pointPlace.transform);
 
         button.Init(transition, popup);
-        popup.Init(button, transition.TransitionPopupProperty);
+        popup.Init(button, transition.TransitionPopupProperty, deletedTransitions);
+
+        button.TransitionProperties.FloorNumber = (byte)FloorSelectUse.Floor;
 
         transitionButtons.Add(button);
     }
 
-    private static void AddTransitionToEachOther(List<TransitionButton> transitionButtons)
+    private void AddTransitionFromAPI(Transition transition)
     {
-        for (int i = 0; i < transitionButtons.Count; i++)
+        var popup = Instantiate(popupTransitionPanel, transform);
+        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y), rotation, pointPlace.transform);
+
+        button.Init(transition, popup);
+        popup.Init(button, transition.TransitionPopupProperty, deletedTransitions);
+
+        transitionButtons.Add(button);
+    }
+
+    private void CloseMenu()
+    {
+        TransitionVisible();
+        Disabled();
+    }
+
+    private void TransitionVisible()
+    {
+        if (popupMenuPanel.IsTransitionVisible)
         {
-            for (int j = 0; j < transitionButtons.Count; j++)
-            {
-                if (i != j)
-                {
-                    transitionButtons[i].TransitionProperties
-                        .ConnectedTransitionButtons.Add(transitionButtons[j]);
-                }
-            }
+            transitionButtons.ForEach(x => x.gameObject.SetActive(false));
+        }
+        else
+        {
+            transitionButtons.ForEach(x => x.gameObject.SetActive(true));
         }
     }
 
-    private void HideAllTransitions()
+    public void RenderPointOnCurrentFloor()
     {
         pointButtons.ForEach(x => x.gameObject.SetActive(false));
+        transitionButtons.ForEach(x => x.gameObject.SetActive(false));
+        var floor = (byte)FloorSelectUse.Floor;
+        print(floor);
+
+        pointButtons
+            .Where(x => x.PointProperties.FloorNumber == floor)
+            .ToList()
+            .ForEach(x => x.gameObject.SetActive(true));
+        transitionButtons
+            .Where(x => x.TransitionProperties.FloorNumber == floor)
+            .ToList()
+            .ForEach(x => x.gameObject.SetActive(true));
     }
 
-    private void ShowAllTransitions()
+    private void Disabled()
     {
-        pointButtons.ForEach(x => x.gameObject.SetActive(true));
-    }
+        if (popupMenuPanel.IsDisabled)
+        {
 
-    /*public void DeletePoint()
-    {
-        DeletePointFromDict();
-    }
+        }
+        else
+        {
 
-    private void DeletePointFromDict()
-    {
-        // points.Remove(currentButton);
+        }
     }
-
-    private void SetButtonClicked(OptionSelect clicked)
-    {
-        buttonClicked = buttonClicked != clicked ? clicked : OptionSelect.NothingSelected;
-    }*/
 
     private void CreatePoint()
     {
@@ -161,15 +243,128 @@ public class MainWindow : MonoBehaviour
             case OptionSelect.LadderSelected:
                 AddTransitionToCanvas(new Ladder());
                 break;
+            case OptionSelect.ElevatorSelected:
+                AddTransitionToCanvas(new Elevator());
+                break;
+            case OptionSelect.ToiletSelected:
+                AddTransitionToCanvas(new Toilet());
+                break;
             case OptionSelect.NothingSelected:
                 break;
         }
     }
 
-    /*public void SaveAll()
-    {   
-        List<PointProperties> pointsProperties = new List<PointProperties>();
-        points.ForEach(x => pointsProperties.Add(x.pointProperties));
-        ioFile.Write(pointsProperties);
-    }*/
+    private void SaveAll()
+    {
+        Debug.Log("Yaaaaay");
+        pointButtons.ForEach(x => x.SetTextFields());
+        pointButtons.Select(x => x.gameObject != null);
+        transitionButtons.Select(x => x.gameObject != null);
+        DeletePoints();
+        DeleteTransitions();
+        AddNewPointsToAPI();
+        AddNewTransitionsToAPI();
+        UpdatePoints();
+        UpdateTransitions();
+    }
+
+    private void AddNewPointsToAPI()
+    {
+        pointButtons
+            .Select(x => x.PointProperties)
+            .ToList()
+            .ForEach(async p => await pointsControllerClient.CreatePoint(
+                new DataClasses.Models.Requests.CreatePointRequest
+                {
+                    id = p.Id,
+                    pointType = p.PointType,
+                    firstField = p.TextFirst,
+                    secondField = p.TextSecond,
+                    thirdField = p.TextThird,
+                    x = p.X,
+                    y = p.Y
+                },
+                1,
+                p.FloorNumber
+            ));
+    }
+
+    private void AddNewTransitionsToAPI()
+    {
+        transitionButtons
+            .Select(x => x.TransitionProperties)
+            .ToList()
+            .ForEach(async p => await transitionsControllerClient.CreateTransition(
+                new DataClasses.Models.Requests.CreateTransitionRequest
+                {
+                    id = p.Id,
+                    transitionType = p.TransitionType,
+                    x = p.X,
+                    y = p.Y
+                },
+                1,
+                p.FloorNumber
+            ));
+    }
+
+    private void UpdatePoints()
+    {
+        pointButtons
+            .Select(x => x.PointProperties)
+            .ToList()
+            .ForEach(async p => await pointsControllerClient.UpdatePoint(
+                new DataClasses.Models.Requests.UpdatePointRequest
+                {
+                    id = p.Id,
+                    pointType = p.PointType,
+                    firstField = p.TextFirst,
+                    secondField = p.TextSecond,
+                    thirdField = p.TextThird,
+                    x = p.X,
+                    y = p.Y
+                },
+                1,
+                p.FloorNumber,
+                p.Id
+            ));
+    }
+
+    private void UpdateTransitions()
+    {
+        transitionButtons
+            .Select(x => x.TransitionProperties)
+            .ToList()
+            .ForEach(async p => await transitionsControllerClient.UpdateTransition(
+                new DataClasses.Models.Requests.UpdateTransitionRequest
+                {
+                    id = p.Id,
+                    transitionType = p.TransitionType,
+                    x = p.X,
+                    y = p.Y
+                },
+                1,
+                p.FloorNumber,
+                p.Id
+            ));
+    }
+
+    private void DeletePoints()
+    {
+        deletedPoints
+            .ForEach(async p => await pointsControllerClient.DeletePoint(
+                1,
+                p.FloorNumber,
+                p.Id
+            ));
+    }
+
+    private void DeleteTransitions()
+    {
+        deletedTransitions
+            .ForEach(async p => await transitionsControllerClient.DeleteTransition(
+                1,
+                p.FloorNumber,
+                p.Id
+            ));
+    }
 }
