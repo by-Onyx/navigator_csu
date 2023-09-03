@@ -19,13 +19,16 @@ public class AgentMovement : MonoBehaviour
     [SerializeField] private GameObject thirdMash;
     [SerializeField] private GameObject fourthMash;
 
+    private Action action;
     private List<Tuple<int, int, GameObject>> hardcodeFloorPosition = new List<Tuple<int, int, GameObject>>();
 
 
     private bool isPathComplete = true;
 
-    public void Init(Vector3 start, Vector3 end)
+    public void Init(Vector3 start, Vector3 end, Action action)
     {
+        this.action = action;
+
         hardcodeFloorPosition.Add(Tuple.Create(0, -11, zeroMash));
         hardcodeFloorPosition.Add(Tuple.Create(1, -21, firstMash));
         hardcodeFloorPosition.Add(Tuple.Create(2, -31, secondMash));
@@ -58,6 +61,9 @@ public class AgentMovement : MonoBehaviour
             Debug.Log("aaa");
             isPathComplete = true;
             drawPath.SetPath(agent.path.corners);
+            action();
+            agent.gameObject.SetActive(false);
+            point.gameObject.SetActive(false);
         }
     }
 }

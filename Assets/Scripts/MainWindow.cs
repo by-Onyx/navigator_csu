@@ -282,7 +282,7 @@ public class MainWindow : MonoBehaviour
             .FirstOrDefault();
         Vector3 end = new Vector3(point.X, point.Y, point.FloorNumber);
 
-        agentMovement.Init(start, end);
+        agentMovement.Init(start, end, floorController.ShowFirstPath);
     }
 
     private void SaveAll()
