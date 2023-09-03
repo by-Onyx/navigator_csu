@@ -146,7 +146,7 @@ public class FloorController : MonoBehaviour
 
     private void CreatePath(int startZ, int endZ)
     {
-        foreach (var line in DrawPath.lineSegments)
+        foreach (var line in DrawPath.LineSegments)
         {
             if (line.Key > startZ && line.Key < endZ)
             {
