@@ -86,6 +86,8 @@ public class MainWindow : MonoBehaviour
 
     private async void StartWithAPI()
     {
+        pointButtons.Clear();
+        transitionButtons.Clear();
         FloorsControllerClient floorsController = new FloorsControllerClient();
         var response = await floorsController.GetAllFloors();
         if (response is null)
@@ -101,6 +103,7 @@ public class MainWindow : MonoBehaviour
 
     private async void StartWithPoints(int floorId)
     {
+        names.Clear();
         var response = await pointsControllerClient.GetAllPoints(1, floorId);
         if (response is null)
         {
@@ -299,7 +302,9 @@ public class MainWindow : MonoBehaviour
         AddNewTransitionsToAPI();
         UpdatePoints();
         UpdateTransitions();
-
+        StartWithAPI();
+        searchSuggestion.Init(names);
+        RenderPointOnCurrentFloor();
     }
 
     private void AddNewPointsToAPI()
