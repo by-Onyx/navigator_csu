@@ -163,7 +163,6 @@ public class MainWindow : MonoBehaviour
         popup.Init(button, point.PointPopupProperty, deletedPoints);
 
         button.PointProperties.FloorNumber = (byte)FloorSelectUse.Floor;
-        print((byte)FloorSelectUse.Floor);
 
         pointButtons.Add(button);
     }
@@ -216,6 +215,8 @@ public class MainWindow : MonoBehaviour
 
     public void RenderPointOnCurrentFloor()
     {
+        pointButtons.Where(x => x == null).ToList().ForEach(x => pointButtons.Remove(x));
+        transitionButtons.Where(x => x == null).ToList().ForEach(x => transitionButtons.Remove(x));
         pointButtons.ForEach(x => x.gameObject.SetActive(false));
         transitionButtons.ForEach(x => x.gameObject.SetActive(false));
         var floor = (byte)FloorSelectUse.Floor;
@@ -287,7 +288,8 @@ public class MainWindow : MonoBehaviour
 
     private void SaveAll()
     {
-        Debug.Log("Yaaaaay");
+        pointButtons.Where(x => x == null).ToList().ForEach(x => pointButtons.Remove(x));
+        transitionButtons.Where(x => x == null).ToList().ForEach(x => transitionButtons.Remove(x));
         pointButtons.ForEach(x => x.SetTextFields());
         pointButtons.Select(x => x.gameObject != null);
         transitionButtons.Select(x => x.gameObject != null);
@@ -297,6 +299,7 @@ public class MainWindow : MonoBehaviour
         AddNewTransitionsToAPI();
         UpdatePoints();
         UpdateTransitions();
+
     }
 
     private void AddNewPointsToAPI()

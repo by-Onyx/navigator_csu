@@ -28,7 +28,6 @@ namespace UIClasses.Popups
             { login = login.text, password = password.text });
             if (response is not null)
             {
-                Debug.Log(response.Value.token);
                 Config.JwtToken = response.Value.token;
                 menuUserPanel.gameObject.SetActive(false);
                 menuAdminPanel.gameObject.SetActive(true);

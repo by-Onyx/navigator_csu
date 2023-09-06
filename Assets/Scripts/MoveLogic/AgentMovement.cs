@@ -58,7 +58,6 @@ public class AgentMovement : MonoBehaviour
     {
         if (agent.hasPath && !isPathComplete)
         {
-            Debug.Log("aaa");
             isPathComplete = true;
             drawPath.SetPath(agent.path.corners);
             action();
