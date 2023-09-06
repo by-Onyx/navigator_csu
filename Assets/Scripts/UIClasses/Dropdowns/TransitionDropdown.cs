@@ -12,7 +12,8 @@ namespace Assets.Scripts.UIClasses.Dropdowns
                 "Ничего не выбранно",
                 "Создать лестницу",
                 "Создать лифт",
-                "Создать туалет"
+                "Создать мужской туалет",
+                "Создать женский туалет"
             };
             AddOptionsToDropdown(options);
         }
@@ -31,7 +32,10 @@ namespace Assets.Scripts.UIClasses.Dropdowns
                     OptionSelectUse.Option = OptionSelect.ElevatorSelected;
                     break;
                 case 3:
-                    OptionSelectUse.Option = OptionSelect.ToiletSelected;
+                    OptionSelectUse.Option = OptionSelect.ManToiletSelected;
+                    break;
+                case 4:
+                    OptionSelectUse.Option = OptionSelect.WomanToiletSelected;
                     break;
             }
         }

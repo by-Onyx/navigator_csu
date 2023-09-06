@@ -8,5 +8,6 @@ public enum OptionSelect
     InterestSelected,
     LadderSelected,
     ElevatorSelected,
-    ToiletSelected
+    ManToiletSelected,
+    WomanToiletSelected
 }

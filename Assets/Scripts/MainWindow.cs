@@ -144,7 +144,10 @@ public class MainWindow : MonoBehaviour
                     AddTransitionFromAPI(new Elevator(properties));
                     break;
                 case 3:
-                    AddTransitionFromAPI(new Toilet(properties));
+                    AddTransitionFromAPI(new ManToilet(properties));
+                    break;
+                case 4:
+                    AddTransitionToCanvas(new WomanToilet(properties));
                     break;
             }
         }
@@ -262,8 +265,11 @@ public class MainWindow : MonoBehaviour
             case OptionSelect.ElevatorSelected:
                 AddTransitionToCanvas(new Elevator());
                 break;
-            case OptionSelect.ToiletSelected:
-                AddTransitionToCanvas(new Toilet());
+            case OptionSelect.ManToiletSelected:
+                AddTransitionToCanvas(new ManToilet());
+                break;
+            case OptionSelect.WomanToiletSelected:
+                AddTransitionToCanvas(new WomanToilet());
                 break;
             case OptionSelect.NothingSelected:
                 break;

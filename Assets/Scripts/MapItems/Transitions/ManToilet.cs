@@ -5,27 +5,27 @@ using UnityEngine;
 
 namespace Assets.Scripts.MapItems.Transitions
 {
-    public class Toilet : Transition
+    public class ManToilet : Transition
     {
-        public Toilet() : base()
+        public ManToilet() : base()
         {
             TransitionProperties.TransitionType = new TransitionTypeModel()
             {
                 id = 3,
-                name = "Туалет",
+                name = "Мужской туалет",
             };
         }
 
-        public Toilet(TransitionProperties transitionProperties) : base(transitionProperties) { }
+        public ManToilet(TransitionProperties transitionProperties) : base(transitionProperties) { }
 
         public override void LoadSprite()
         {
-            UIProperties.Sprite = Resources.Load<Sprite>("Icons/character_T2");
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/М");
         }
 
         public override void SetFields()
         {
-            TransitionPopupProperty = new TransitionPopupProperty("Туалет");
+            TransitionPopupProperty = new TransitionPopupProperty("мужской туалет");
         }
     }
 }
