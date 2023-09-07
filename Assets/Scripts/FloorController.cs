@@ -124,15 +124,15 @@ public class FloorController : MonoBehaviour
             case FloorSelect.ZeroFloor:
                 return (-15, -05);
             case FloorSelect.FirstFloor:
-                return (-25, -15);
+                return (-115, -105);
             case FloorSelect.SecondFloor:
-                return (-35, -25);
+                return (-215, -205);
             case FloorSelect.ThirdFloor:
-                return (-45, -35);
+                return (-315, -305);
             case FloorSelect.FourthFloor:
-                return (-55, -45);
+                return (-405, -405);
             default:
-                return (-25, -15);
+                return (-115, -105);
         }
     }
 

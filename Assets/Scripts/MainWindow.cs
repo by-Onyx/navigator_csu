@@ -176,7 +176,7 @@ public class MainWindow : MonoBehaviour
     private void AddPointFromAPI(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -90), rotation, pointPlace.transform);
+        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -500), rotation, pointPlace.transform);
 
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty, deletedPoints);
@@ -200,7 +200,7 @@ public class MainWindow : MonoBehaviour
     private void AddTransitionFromAPI(Transition transition)
     {
         var popup = Instantiate(popupTransitionPanel, transform);
-        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y, -90), rotation, pointPlace.transform);
+        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y, -500), rotation, pointPlace.transform);
 
         button.Init(transition, popup);
         popup.Init(button, transition.TransitionPopupProperty, deletedTransitions);

@@ -29,11 +29,11 @@ public class AgentMovement : MonoBehaviour
     {
         this.action = action;
 
-        hardcodeFloorPosition.Add(Tuple.Create(0, -11, zeroMash));
-        hardcodeFloorPosition.Add(Tuple.Create(1, -21, firstMash));
-        hardcodeFloorPosition.Add(Tuple.Create(2, -31, secondMash));
-        hardcodeFloorPosition.Add(Tuple.Create(3, -41, thirdMash));
-        hardcodeFloorPosition.Add(Tuple.Create(4, -51, fourthMash));
+        hardcodeFloorPosition.Add(Tuple.Create(0, -10, zeroMash));
+        hardcodeFloorPosition.Add(Tuple.Create(1, -110, firstMash));
+        hardcodeFloorPosition.Add(Tuple.Create(2, -210, secondMash));
+        hardcodeFloorPosition.Add(Tuple.Create(3, -310, thirdMash));
+        hardcodeFloorPosition.Add(Tuple.Create(4, -410, fourthMash));
 
         hardcodeFloorPosition.Where(x => x.Item1 != start.z).ToList().ForEach(x => x.Item3.gameObject.SetActive(false));
 
