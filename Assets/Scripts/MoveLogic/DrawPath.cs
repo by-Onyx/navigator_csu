@@ -52,13 +52,28 @@ namespace Assets.Scripts.MoveLogic
             {
                 if (currentSegment.Count > 0 && ((int)currentSegment[currentSegment.Count - 1].z) != ((int)point.z))
                 {
-                    LineSegments.Add((int)Math.Round(currentSegment[0].z), currentSegment.ToArray());
+                    if (LineSegments.ContainsKey((int)Math.Round(currentSegment[0].z)))
+                    {
+                        LineSegments.Add((int)Math.Round(currentSegment[0].z) + 1, currentSegment.ToArray());
+                    }
+                    else
+                    {
+                        LineSegments.Add((int)Math.Round(currentSegment[0].z), currentSegment.ToArray());
+                    }
+
                     currentSegment.Clear();
                 }
 
                 currentSegment.Add(point);
             }
-            LineSegments.Add((int)Math.Round(currentSegment[0].z), currentSegment.ToArray());
+            if (LineSegments.ContainsKey((int)Math.Round(currentSegment[0].z)))
+            {
+                LineSegments.Add((int)Math.Round(currentSegment[0].z) + 1, currentSegment.ToArray());
+            }
+            else
+            {
+                LineSegments.Add((int)Math.Round(currentSegment[0].z), currentSegment.ToArray());
+            }
         }
     }
 }
