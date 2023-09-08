@@ -10,8 +10,8 @@ namespace Assets.Scripts.UIClasses.Dropdowns
             List<string> options = new List<string>()
             {
                 "Ничего не выбранно",
-                "Создать лестницу",
-                "Создать лифт",
+                "Создать выход",
+                "Создать пожарный выход",
                 "Создать мужской туалет",
                 "Создать женский туалет"
             };
@@ -26,10 +26,10 @@ namespace Assets.Scripts.UIClasses.Dropdowns
                     OptionSelectUse.Option = OptionSelect.NothingSelected;
                     break;
                 case 1:
-                    OptionSelectUse.Option = OptionSelect.LadderSelected;
+                    OptionSelectUse.Option = OptionSelect.ExitSelected;
                     break;
                 case 2:
-                    OptionSelectUse.Option = OptionSelect.ElevatorSelected;
+                    OptionSelectUse.Option = OptionSelect.FireExitSelected;
                     break;
                 case 3:
                     OptionSelectUse.Option = OptionSelect.ManToiletSelected;

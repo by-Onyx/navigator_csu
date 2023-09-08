@@ -20,7 +20,7 @@ namespace Assets.Scripts.MapItems.Points
 
         public override void LoadSprite()
         {
-            UIProperties.Sprite = Resources.Load<Sprite>("Icons/exclam_sign");
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/interest");
         }
 
         public override void SetFields()

@@ -1,5 +1,6 @@
 using Assets.Scripts.DataClasses;
 using Assets.Scripts.MoveLogic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,8 +11,6 @@ public class FloorController : MonoBehaviour
     [SerializeField] GameObject ground_for_ground;
     [SerializeField] GameObject[] floorGrids;
     [SerializeField] Button[] floorButtons;
-    [SerializeField] TMP_Text start;
-    [SerializeField] TMP_Text end;
     private AgentMovement agent_movement;
     private FloorSelect currentFloor = FloorSelect.FirstFloor;
 
@@ -71,16 +70,13 @@ public class FloorController : MonoBehaviour
 
     private void CreatePath(int startZ, int endZ)
     {
-        int count = 0;
-        foreach (var line in DrawPath.LineSegments)
+
+        foreach (var line in DrawPath.LineSegments.OrderBy(x=>x.Key))
         {
-            int pointCount = 0;
-            count++;
             if (line.Key > startZ && line.Key < endZ)
             {
                 foreach (var point in line.Value)
                 {
-                    pointCount++;
                     if (firstPoint)
                     {
                         agent_movement.drawPath.Init(point);
@@ -89,28 +85,6 @@ public class FloorController : MonoBehaviour
                     else
                     {
                         agent_movement.drawPath.AddAPoint(point);
-                    }
-
-                    if (count == 1 && pointCount == 1) 
-                    {
-                        start.transform.SetPositionAndRotation(new Vector3(point.x, point.y), new Quaternion());
-                        start.transform.SetAsLastSibling();
-                        start.gameObject.SetActive(true);
-                    }
-                    else if(count != 1)
-                    {
-                        start.gameObject.SetActive(false);
-                    }
-
-                    if (count == DrawPath.LineSegments.Count)
-                    {
-                        end.transform.SetPositionAndRotation(new Vector3(point.x, point.y), new Quaternion());
-                        end.transform.SetAsLastSibling();
-                        end.gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        end.gameObject.SetActive(false);
                     }
                 }
             }
@@ -124,15 +98,15 @@ public class FloorController : MonoBehaviour
             case FloorSelect.ZeroFloor:
                 return (-15, -05);
             case FloorSelect.FirstFloor:
-                return (-115, -105);
+                return (-85, -75);
             case FloorSelect.SecondFloor:
-                return (-215, -205);
+                return (-155, -145);
             case FloorSelect.ThirdFloor:
-                return (-315, -305);
+                return (-225, -215);
             case FloorSelect.FourthFloor:
-                return (-405, -405);
+                return (-295, -285);
             default:
-                return (-115, -105);
+                return (-85, -75);
         }
     }
 

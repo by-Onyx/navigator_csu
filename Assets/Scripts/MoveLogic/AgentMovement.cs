@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,8 +20,9 @@ public class AgentMovement : MonoBehaviour
     [SerializeField] private GameObject thirdMash;
     [SerializeField] private GameObject fourthMash;
 
+    private Dictionary<int, GameObject> hardcodeFloorPosition = new Dictionary<int, GameObject>();
+
     private Action action;
-    private List<Tuple<int, int, GameObject>> hardcodeFloorPosition = new List<Tuple<int, int, GameObject>>();
 
 
     private bool isPathComplete = true;
@@ -29,16 +31,23 @@ public class AgentMovement : MonoBehaviour
     {
         this.action = action;
 
-        hardcodeFloorPosition.Add(Tuple.Create(0, -10, zeroMash));
-        hardcodeFloorPosition.Add(Tuple.Create(1, -110, firstMash));
-        hardcodeFloorPosition.Add(Tuple.Create(2, -210, secondMash));
-        hardcodeFloorPosition.Add(Tuple.Create(3, -310, thirdMash));
-        hardcodeFloorPosition.Add(Tuple.Create(4, -410, fourthMash));
+        hardcodeFloorPosition.Clear();
 
-        hardcodeFloorPosition.Where(x => x.Item1 != start.z).ToList().ForEach(x => x.Item3.gameObject.SetActive(false));
+        hardcodeFloorPosition.Add(-10, zeroMash);
+        hardcodeFloorPosition.Add(-80, firstMash);
+        hardcodeFloorPosition.Add(-150, secondMash);
+        hardcodeFloorPosition.Add(-220, thirdMash);
+        hardcodeFloorPosition.Add(-290, fourthMash);
 
-        start.z = hardcodeFloorPosition[(int)start.z].Item2;
-        end.z = hardcodeFloorPosition[(int)end.z].Item2;
+        foreach (var pair in hardcodeFloorPosition)
+        {
+            if (pair.Key != start.z)
+            {
+                pair.Value.gameObject.SetActive(false);
+                print(1);
+            }
+        }
+        
 
         print(start);
         print(end);
@@ -51,7 +60,10 @@ public class AgentMovement : MonoBehaviour
         agent.SetDestination(point.position);
         isPathComplete = false;
 
-        hardcodeFloorPosition.ForEach(x => x.Item3.gameObject.SetActive(true));
+        foreach (var pair in hardcodeFloorPosition)
+        {
+            pair.Value.gameObject.SetActive(true);
+        }
     }
 
     private void Update()

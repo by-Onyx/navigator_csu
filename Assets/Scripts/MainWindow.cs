@@ -18,6 +18,8 @@ using DataClasses.Properties.MapItemProperties;
 using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using System.Threading;
 using System.IO;
+using UnityEngine.Experimental.GlobalIllumination;
+using System;
 
 public class MainWindow : MonoBehaviour
 {
@@ -45,6 +47,8 @@ public class MainWindow : MonoBehaviour
 
     [SerializeField] private FloorController floorController;
 
+    private Dictionary<int, int> hardcodeFloorPosition = new Dictionary<int, int>();
+
     private List<PointButton> pointButtons = new();
     private List<TransitionButton> transitionButtons = new();
     private List<PointProperty> deletedPoints = new();
@@ -58,6 +62,12 @@ public class MainWindow : MonoBehaviour
 
     private void Awake()
     {
+        hardcodeFloorPosition.Add(0, -10);
+        hardcodeFloorPosition.Add(1, -80);
+        hardcodeFloorPosition.Add(2, -150);
+        hardcodeFloorPosition.Add(3, -220);
+        hardcodeFloorPosition.Add(4, -290);
+
         pointDropdown.Init();
         transitionDropdown.Init();
         closeButton.onClick.AddListener(CloseMenu);
@@ -86,6 +96,12 @@ public class MainWindow : MonoBehaviour
 
     private async void StartWithAPI()
     {
+        names.Clear();
+        names.Add("Выход");
+        names.Add("Пожарный выход");
+        names.Add("Мужской туалет");
+        names.Add("Женский туалет");
+
         pointButtons.Clear();
         transitionButtons.Clear();
         FloorsControllerClient floorsController = new FloorsControllerClient();
@@ -96,14 +112,14 @@ public class MainWindow : MonoBehaviour
         }
         foreach (var floor in response.Value.floors)
         {
-            StartWithPoints(floor.id);
-            StartWithTransitions(floor.id);
+            StartWithPoints(floor.number);
+            StartWithTransitions(floor.number);
         }
     }
 
     private async void StartWithPoints(int floorId)
     {
-        names.Clear();
+
         var response = await pointsControllerClient.GetAllPoints(1, floorId);
         if (response is null)
         {
@@ -137,17 +153,17 @@ public class MainWindow : MonoBehaviour
             properties.FloorNumber = floorId;
             switch (properties.TransitionType.id)
             {
-                case 1:
-                    AddTransitionFromAPI(new Ladder(properties));
-                    break;
-                case 2:
-                    AddTransitionFromAPI(new Elevator(properties));
-                    break;
-                case 3:
+                case 7:
                     AddTransitionFromAPI(new ManToilet(properties));
                     break;
                 case 4:
-                    AddTransitionToCanvas(new WomanToilet(properties));
+                    AddTransitionFromAPI(new WomanToilet(properties));
+                    break;
+                case 5:
+                    AddTransitionFromAPI(new Exit(properties));
+                    break;
+                case 6:
+                    AddTransitionFromAPI(new FireExit(properties));
                     break;
             }
         }
@@ -259,11 +275,11 @@ public class MainWindow : MonoBehaviour
             case OptionSelect.InterestSelected:
                 AddPointToCanvas(new Interest());
                 break;
-            case OptionSelect.LadderSelected:
-                AddTransitionToCanvas(new Ladder());
+            case OptionSelect.FireExitSelected:
+                AddTransitionToCanvas(new FireExit());
                 break;
-            case OptionSelect.ElevatorSelected:
-                AddTransitionToCanvas(new Elevator());
+            case OptionSelect.ExitSelected:
+                AddTransitionToCanvas(new Exit());
                 break;
             case OptionSelect.ManToiletSelected:
                 AddTransitionToCanvas(new ManToilet());
@@ -280,19 +296,98 @@ public class MainWindow : MonoBehaviour
     {
         if (string.IsNullOrEmpty(pathFrom.text) || string.IsNullOrEmpty(pathTo.text)) return;
 
-        var point = pointButtons
-            .Where(x => x.PointProperties.TextFirst == pathFrom.text)
-            .Select(x => x.PointProperties)
-            .FirstOrDefault();
-        Vector3 start = new Vector3(point.X, point.Y, point.FloorNumber);
+        Vector3 start;
+        Vector3 end;
 
-        point = pointButtons
-            .Where(x => x.PointProperties.TextFirst == pathTo.text)
-            .Select(x => x.PointProperties)
-            .FirstOrDefault();
-        Vector3 end = new Vector3(point.X, point.Y, point.FloorNumber);
+        var points1 = CheckStartAndEnd(pathFrom.text);
+        var points2 = CheckStartAndEnd(pathTo.text);
+
+        if (points1.Count == 1)
+        {
+            for (int i = 0; i < points2.Count; i++)
+            {
+                var pos = points2[i];
+                pos.z = hardcodeFloorPosition[(int)pos.z];
+                points2[i] = pos;
+            }
+
+            if (points2.Count == 0)
+            {
+                return;
+            }
+
+            start = points1[0];
+            start.z = hardcodeFloorPosition[(int)start.z];
+            end = points2[0];
+            float closestDistance = Vector3.Distance(points2[0], start);
+
+            foreach (Vector3 point in points2)
+            {
+                float distance = Vector3.Distance(point, start);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    end = point;
+                }
+            }
+        }
+        else
+        {
+            return;
+        }
 
         agentMovement.Init(start, end, floorController.ShowFirstPath);
+    }
+
+    private List<Vector3> CheckStartAndEnd(string path)
+    {
+        List<Vector3> pos = new List<Vector3>();
+        switch (path)
+        {
+            case "Выход":
+                transitionButtons
+                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "выход")
+                    .Select(x => x.TransitionProperties)
+                    .ToList()
+                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                break;
+            case "Пожарный выход":
+                transitionButtons
+                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "пожарный выход")
+                    .Select(x => x.TransitionProperties)
+                    .ToList()
+                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                break;
+            case "Мужской туалет":
+                transitionButtons
+                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "мужской туалет")
+                    .Select(x => x.TransitionProperties)
+                    .ToList()
+                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                break;
+            case "Женский туалет":
+                transitionButtons
+                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "женский туалет")
+                    .Select(x => x.TransitionProperties)
+                    .ToList()
+                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                break;
+            default:
+                var point = pointButtons
+                    .Where(x => x.PointProperties.TextFirst == path)
+                    .Select(x => x.PointProperties)
+                    .FirstOrDefault();
+                ;
+                pos.Add(new Vector3(point.X, point.Y, point.FloorNumber));
+                break;
+        }
+
+        return pos;
+    }
+
+    private void GetAllTransitions()
+    {
+
     }
 
     private void SaveAll()
