@@ -26,7 +26,6 @@ public class FloorController : MonoBehaviour
     {
         firstPoint = true;
         agent_movement.drawPath.DeleteLine();
-        Debug.Log($"нажата кнопка {floor}");
         currentFloor = floor;
         UpdateFloorVisibility();
         var frstcoord = GetFloorCoordinates(floor).Item1;
@@ -70,17 +69,19 @@ public class FloorController : MonoBehaviour
 
     private void CreatePath(int startZ, int endZ)
     {
-
+        int c = 0;
         foreach (var line in DrawPath.LineSegments.OrderBy(x=>x.Key))
         {
             if (line.Key > startZ && line.Key < endZ)
             {
+                firstPoint = true;
                 foreach (var point in line.Value)
                 {
                     if (firstPoint)
                     {
                         agent_movement.drawPath.Init(point);
                         firstPoint = false;
+                        c++;
                     }
                     else
                     {

@@ -12,6 +12,7 @@ namespace Assets.Scripts.MoveLogic
     {
         [SerializeField] private LineRenderer line;
         private LineRenderer path;
+        private List<LineRenderer> floorPaths = new List<LineRenderer>();
         public static Dictionary<int, Vector3[]> LineSegments = new Dictionary<int, Vector3[]>();
 
         public void Init(Vector3 pos)
@@ -21,7 +22,7 @@ namespace Assets.Scripts.MoveLogic
 
         public void DeleteLine()
         {
-            Destroy(path);
+            floorPaths.ForEach(x => Destroy(x));
         }
 
         public void NewPath()
@@ -34,6 +35,7 @@ namespace Assets.Scripts.MoveLogic
             path = Instantiate(line);
             path.SetPosition(0, pos);
             path.SetPosition(1, pos);
+            floorPaths.Add(path);
         }
 
         public void AddAPoint(Vector3 pointPos)
