@@ -12,7 +12,7 @@ namespace ControllerClients
     {
         public async Task<GetAllPointsResponse?> GetAllPoints(int buildingId, int floorNumber)
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/point";
             using var www = UnityWebRequest.Get(url);
 
             www.SetRequestHeader("accept", "*/*");
@@ -41,7 +41,7 @@ namespace ControllerClients
             int buildingId,
             int floorNumber)
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/point";
             using var www = UnityWebRequest.Post(url, new WWWForm());
 
             www.SetRequestHeader("accept", "*/*");
@@ -76,7 +76,7 @@ namespace ControllerClients
             int pointId
             )
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point/{pointId}";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/point/{pointId}";
             var requestJson = JsonUtility.ToJson(request);
             using var www = UnityWebRequest.Put(url, requestJson);
 
@@ -106,7 +106,7 @@ namespace ControllerClients
             int pointId
             )
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/point/{pointId}";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/point/{pointId}";
             using var www = UnityWebRequest.Delete(url);
 
             www.SetRequestHeader("accept", "*/*");

@@ -11,7 +11,7 @@ namespace ControllerClients
         public async Task<GetAllFloorsResponse?> GetAllFloors(int buildingId = 1)
         {
 
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor";
             using var www = UnityWebRequest.Get(url);
 
             www.SetRequestHeader("accept", "*/*");

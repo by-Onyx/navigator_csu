@@ -11,7 +11,7 @@ namespace Assets.Scripts.MapItems.Points
         {
             PointProperty.PointType = new PointTypeModel()
             {
-                id = 1,
+                id = 2,
                 name = "Точка интереса"
             };
         }
@@ -20,7 +20,7 @@ namespace Assets.Scripts.MapItems.Points
 
         public override void LoadSprite()
         {
-            UIProperties.Sprite = Resources.Load<Sprite>("Icons/interest");
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/exclam_sign");
         }
 
         public override void SetFields()

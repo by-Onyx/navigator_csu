@@ -19,7 +19,7 @@ using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using System.Threading;
 using System.IO;
 using UnityEngine.Experimental.GlobalIllumination;
-using System;
+using static UnityEditor.PlayerSettings;
 
 public class MainWindow : MonoBehaviour
 {
@@ -47,8 +47,6 @@ public class MainWindow : MonoBehaviour
 
     [SerializeField] private FloorController floorController;
 
-    private Dictionary<int, int> hardcodeFloorPosition = new Dictionary<int, int>();
-
     private List<PointButton> pointButtons = new();
     private List<TransitionButton> transitionButtons = new();
     private List<PointProperty> deletedPoints = new();
@@ -62,12 +60,6 @@ public class MainWindow : MonoBehaviour
 
     private void Awake()
     {
-        hardcodeFloorPosition.Add(0, -10);
-        hardcodeFloorPosition.Add(1, -80);
-        hardcodeFloorPosition.Add(2, -150);
-        hardcodeFloorPosition.Add(3, -220);
-        hardcodeFloorPosition.Add(4, -290);
-
         pointDropdown.Init();
         transitionDropdown.Init();
         closeButton.onClick.AddListener(CloseMenu);
@@ -96,12 +88,6 @@ public class MainWindow : MonoBehaviour
 
     private async void StartWithAPI()
     {
-        names.Clear();
-        names.Add("Выход");
-        names.Add("Пожарный выход");
-        names.Add("Мужской туалет");
-        names.Add("Женский туалет");
-
         pointButtons.Clear();
         transitionButtons.Clear();
         FloorsControllerClient floorsController = new FloorsControllerClient();
@@ -112,14 +98,18 @@ public class MainWindow : MonoBehaviour
         }
         foreach (var floor in response.Value.floors)
         {
-            StartWithPoints(floor.number);
-            StartWithTransitions(floor.number);
+            StartWithPoints(floor.id);
+            StartWithTransitions(floor.id);
         }
     }
 
     private async void StartWithPoints(int floorId)
     {
-
+        names.Clear();
+        names.Add("Выход");
+        names.Add("Пожарный выход");
+        names.Add("Мужской туалет");
+        names.Add("Женский туалет");
         var response = await pointsControllerClient.GetAllPoints(1, floorId);
         if (response is null)
         {
@@ -157,13 +147,13 @@ public class MainWindow : MonoBehaviour
                     AddTransitionFromAPI(new ManToilet(properties));
                     break;
                 case 4:
-                    AddTransitionFromAPI(new WomanToilet(properties));
+                    AddTransitionToCanvas(new WomanToilet(properties));
                     break;
                 case 5:
-                    AddTransitionFromAPI(new Exit(properties));
+                    AddTransitionToCanvas(new Exit(properties));
                     break;
                 case 6:
-                    AddTransitionFromAPI(new FireExit(properties));
+                    AddTransitionToCanvas(new FireExit(properties));
                     break;
             }
         }
@@ -192,7 +182,7 @@ public class MainWindow : MonoBehaviour
     private void AddPointFromAPI(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -500), rotation, pointPlace.transform);
+        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -90), rotation, pointPlace.transform);
 
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty, deletedPoints);
@@ -216,7 +206,7 @@ public class MainWindow : MonoBehaviour
     private void AddTransitionFromAPI(Transition transition)
     {
         var popup = Instantiate(popupTransitionPanel, transform);
-        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y, -500), rotation, pointPlace.transform);
+        var button = Instantiate(transitionButton, new Vector3(transition.TransitionProperties.X, transition.TransitionProperties.Y, -90), rotation, pointPlace.transform);
 
         button.Init(transition, popup);
         popup.Init(button, transition.TransitionPopupProperty, deletedTransitions);
@@ -302,22 +292,17 @@ public class MainWindow : MonoBehaviour
         var points1 = CheckStartAndEnd(pathFrom.text);
         var points2 = CheckStartAndEnd(pathTo.text);
 
-        if (points1.Count == 1)
+        if(points1.Count == 1)
         {
-            for (int i = 0; i < points2.Count; i++)
-            {
-                var pos = points2[i];
-                pos.z = hardcodeFloorPosition[(int)pos.z];
-                points2[i] = pos;
-            }
+            
+            points2 = points2.Where(x => x.z == points1[0].z).ToList();
 
-            if (points2.Count == 0)
+            if(points2.Count == 0)
             {
                 return;
             }
 
             start = points1[0];
-            start.z = hardcodeFloorPosition[(int)start.z];
             end = points2[0];
             float closestDistance = Vector3.Distance(points2[0], start);
 
@@ -345,32 +330,16 @@ public class MainWindow : MonoBehaviour
         switch (path)
         {
             case "Выход":
-                transitionButtons
-                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "выход")
-                    .Select(x => x.TransitionProperties)
-                    .ToList()
-                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                pos = GetStartAndEnd("выход");
                 break;
             case "Пожарный выход":
-                transitionButtons
-                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "пожарный выход")
-                    .Select(x => x.TransitionProperties)
-                    .ToList()
-                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                pos = GetStartAndEnd("пожарный выход");
                 break;
             case "Мужской туалет":
-                transitionButtons
-                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "мужской туалет")
-                    .Select(x => x.TransitionProperties)
-                    .ToList()
-                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                pos = GetStartAndEnd("мужской туалет");
                 break;
             case "Женский туалет":
-                transitionButtons
-                    .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == "женский туалет")
-                    .Select(x => x.TransitionProperties)
-                    .ToList()
-                    .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
+                pos = GetStartAndEnd("женский туалет");
                 break;
             default:
                 var point = pointButtons
@@ -385,9 +354,16 @@ public class MainWindow : MonoBehaviour
         return pos;
     }
 
-    private void GetAllTransitions()
+    private List<Vector3> GetStartAndEnd(string name)
     {
+        List<Vector3> pos = new List<Vector3>();
+        transitionButtons
+            .Where(x => x.TransitionProperties.TransitionType.name.ToLower() == name)
+            .Select(x => x.TransitionProperties)
+            .ToList()
+            .ForEach(x => pos.Add(new Vector3(x.X, x.Y, x.FloorNumber)));
 
+        return pos;
     }
 
     private void SaveAll()

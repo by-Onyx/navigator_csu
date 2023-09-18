@@ -11,7 +11,7 @@ namespace ControllerClients
     {
         public async Task<LoginResponse?> LogIn(LoginRequest request)
         {
-            const string url = "http://195.54.14.121:8086/api/auth/login";
+            const string url = "http://195.54.14.121:87/api/auth/login";
             using var www = UnityWebRequest.Post(url, new WWWForm());
 
             www.SetRequestHeader("accept", "*/*");

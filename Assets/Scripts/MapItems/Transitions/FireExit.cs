@@ -16,8 +16,8 @@ namespace Assets.Scripts.MapItems.Transitions
         {
             TransitionProperties.TransitionType = new TransitionTypeModel()
             {
-                id = 6,
-                name = "Выход",
+                id = 4,
+                name = "Пожарный выход",
             };
         }
 
@@ -25,7 +25,7 @@ namespace Assets.Scripts.MapItems.Transitions
 
         public override void LoadSprite()
         {
-            UIProperties.Sprite = Resources.Load<Sprite>("Icons/Fire");
+            UIProperties.Sprite = Resources.Load<Sprite>("Icons/Ж");
         }
 
         public override void SetFields()

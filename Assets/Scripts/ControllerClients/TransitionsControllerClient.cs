@@ -12,7 +12,7 @@ namespace ControllerClients
     {
         public async Task<GetAllTransitionsResponse?> GetAllTransitions(int buildingId, int floorNumber)
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/transition";
             using var www = UnityWebRequest.Get(url);
 
             www.SetRequestHeader("accept", "*/*");
@@ -43,7 +43,7 @@ namespace ControllerClients
             int floorNumber
             )
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/transition";
             using var www = UnityWebRequest.Post(url, new WWWForm());
 
             www.SetRequestHeader("accept", "*/*");
@@ -78,7 +78,7 @@ namespace ControllerClients
             int transitionId
         )
         {
-            var url = $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition/{transitionId}";
+            var url = $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/transition/{transitionId}";
             var requestJson = JsonUtility.ToJson(request);
             using var www = UnityWebRequest.Put(url, requestJson);
 
@@ -109,7 +109,7 @@ namespace ControllerClients
             )
         {
             var url =
-                $"http://195.54.14.121:8086/api/building/{buildingId}/floor/{floorNumber}/transition/{transitionId}";
+                $"http://195.54.14.121:87/api/building/{buildingId}/floor/{floorNumber}/transition/{transitionId}";
             using var www = UnityWebRequest.Delete(url);
 
             www.SetRequestHeader("accept", "*/*");
