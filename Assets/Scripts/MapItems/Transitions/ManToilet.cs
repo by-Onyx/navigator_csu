@@ -11,7 +11,7 @@ namespace Assets.Scripts.MapItems.Transitions
         {
             TransitionProperties.TransitionType = new TransitionTypeModel()
             {
-                id = 7,
+                id = 5,
                 name = "Мужской туалет",
             };
         }

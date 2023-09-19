@@ -19,8 +19,6 @@ using Assets.Scripts.DataClasses.Properties.MapItemProperties;
 using System.Threading;
 using System.IO;
 using UnityEngine.Experimental.GlobalIllumination;
-using static UnityEditor.PlayerSettings;
-
 public class MainWindow : MonoBehaviour
 {
     [SerializeField] private Canvas pointPlace;
@@ -98,8 +96,8 @@ public class MainWindow : MonoBehaviour
         }
         foreach (var floor in response.Value.floors)
         {
-            StartWithPoints(floor.id);
-            StartWithTransitions(floor.id);
+            StartWithPoints(floor.number);
+            StartWithTransitions(floor.number);
         }
     }
 
@@ -143,17 +141,17 @@ public class MainWindow : MonoBehaviour
             properties.FloorNumber = floorId;
             switch (properties.TransitionType.id)
             {
-                case 7:
+                case 5:
                     AddTransitionFromAPI(new ManToilet(properties));
                     break;
-                case 4:
-                    AddTransitionToCanvas(new WomanToilet(properties));
-                    break;
-                case 5:
-                    AddTransitionToCanvas(new Exit(properties));
-                    break;
                 case 6:
-                    AddTransitionToCanvas(new FireExit(properties));
+                    AddTransitionFromAPI(new WomanToilet(properties));
+                    break;
+                case 3:
+                    AddTransitionFromAPI(new Exit(properties));
+                    break;
+                case 4:
+                    AddTransitionFromAPI(new FireExit(properties));
                     break;
             }
         }
@@ -182,7 +180,7 @@ public class MainWindow : MonoBehaviour
     private void AddPointFromAPI(Point point)
     {
         var popup = Instantiate(popupPointPanel, transform);
-        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -90), rotation, pointPlace.transform);
+        var button = Instantiate(pointButton, new Vector3(point.PointProperty.X, point.PointProperty.Y, -400), rotation, pointPlace.transform);
 
         button.Init(point, popup);
         popup.Init(button, point.PointPopupProperty, deletedPoints);
